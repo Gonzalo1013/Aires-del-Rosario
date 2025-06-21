@@ -20,7 +20,7 @@ const marcas = [{
 ];
 ---
 
-<section class="py-12 bg-white text-center">
+<section class="py-12 bg-white text-center text-gray-100">
   <h2 class="text-2xl font-bold mb-6">Trabajamos todas las marcas</h2>
 
   <div class="overflow-hidden">
@@ -31,10 +31,16 @@ const marcas = [{
           style="min-width: 120px"
 
         >
-          <img src={marca.src} alt={marca.name} class="size-20 sm:size-32  mx-auto mb-2 rounded-full p-1 shadow-md" />
+          <img src={marca.src} alt={marca.name} class="size-20 sm:size-32 bg-gray-100 mx-auto mb-2 rounded-full p-1 shadow-md" />
           
         </div>
       ))}
     </div>
   </div>
 </section>
+
+<style>
+    section {
+        background-color: rgb(31, 29, 48);
+    }
+</style>
