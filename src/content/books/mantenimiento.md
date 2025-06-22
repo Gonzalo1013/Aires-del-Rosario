@@ -1,5 +1,6 @@
 ---
 title: Mantenimiento
+subtitle: Mantenimiento preventivo y correctivo de aire acondicionado
 img: mantenimiento1.jpeg
 description: Limpieza profunda de unidades internas y externas.
 
@@ -7,10 +8,11 @@ description: Limpieza profunda de unidades internas y externas.
 
 
 
-hoy en el dia de la fecha estuve codeando un buen rato para ver si hago andar esta mierda
-y tambien estuve jugando con los mancos de mis amigos y no ganamos ni una partida porque somos horribles. 
+Mantenimiento preventivo y correctivo de aire acondicionado
 
-**te queria contar que con chat gpt estuvimos haciendo una hermosa web pero no tan hermosa como
-mi esposa que ella si es hermosa, pero no me entrega la cola rica y redonda que tiene**
+Contenido:
+Ofrecemos mantenimiento integral para equipos residenciales y comerciales, mejorando el rendimiento, la eficiencia energética y la vida útil de tu aire acondicionado. El mantenimiento preventivo permite evitar fallas, ahorrar energía y preservar la salud del ambiente.
 
-Ahora se me hace la enojada y viene a mopolestarmemientras yo escribo mi content en yuhv 9¿iu todo sirve
+El servicio incluye limpieza de filtros, revisión de desagüe, control de presión, chequeo de consumo eléctrico, revisión del capacitor y lubricación de componentes cuando corresponde. En equipos inverter también realizamos chequeo electrónico de sensores y componentes críticos.
+
+Un equipo mantenido correctamente no solo funciona mejor, sino que también consume menos y extiende su vida útil. Recomendamos realizarlo al menos una vez al año, especialmente antes del verano o el invierno.

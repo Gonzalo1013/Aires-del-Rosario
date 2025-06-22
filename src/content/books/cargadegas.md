@@ -1,5 +1,6 @@
 ---
 title: Carga de Gas
+subtitle: Carga de gas refrigerante con precisión técnica
 img: cargadegas.jpeg
 description: Revisión del circuito frigorífico y recarga de refrigerante.
 
@@ -7,10 +8,10 @@ description: Revisión del circuito frigorífico y recarga de refrigerante.
 ---
 
 
-hoy en el dia de la fecha estuve codeando un buen rato para ver si hago andar esta mierda
-y tambien estuve jugando con los mancos de mis amigos y no ganamos ni una partida porque somos horribles. 
 
-**te queria contar que con chat gpt estuvimos haciendo una hermosa web pero no tan hermosa como
-mi esposa que ella si es hermosa, pero no me entrega la cola rica y redonda que tiene**
+Contenido:
+Realizamos carga de gas con diagnóstico previo del sistema para evitar recargas innecesarias y detectar posibles fugas o fallas ocultas. Trabajamos con gases refrigerantes R410A, R134A y R22, según el equipo y normativa correspondiente.
 
-Ahora se me hace la enojada y viene a mopolestarmemientras yo escribo mi content en yuhv 9¿iu todo sirve
+La carga se realiza con herramientas de medición calibradas, respetando las presiones indicadas por el fabricante, garantizando el rendimiento óptimo del equipo y prolongando su vida útil. No hacemos “cargas por cargar”: primero diagnosticamos, luego actuamos.
+
+Un aire con baja carga de gas consume más energía, enfría menos y se desgasta más rápido. Por eso, este servicio debe ser ejecutado por personal capacitado y con conocimiento técnico.

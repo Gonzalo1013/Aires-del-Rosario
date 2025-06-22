@@ -18,9 +18,7 @@ const books = await getCollection("books");
                 Nuestros Servicios
             </h1>
             <div class="px-4 mx-auto max-w-screen-xl">
-                <div
-                    class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8"
-                >
+                <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8">
                     {
                         books.map((book) => {
                             const { slug, data } = book;
@@ -38,7 +36,7 @@ const books = await getCollection("books");
                                                 transition:name={`img-${slug}`}
                                                 class="object-cover w-full h-full"
                                                 src={`/${img}`}
-                                                alt={title}
+                                                alt={`${title} - mantenimiento - reparacion - instalación de aire acondicionado en Rosario - recarga de gas refrigerante r22 r410a`}
                                             />
                                             </div>
                                         

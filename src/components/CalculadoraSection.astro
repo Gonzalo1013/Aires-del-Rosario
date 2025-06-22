@@ -10,30 +10,30 @@ const images = [
 let currentIndex = 0;
 ---
 
-<section class="max-w-7xl mx-auto px-4 py-12 ">
-  <div class="sm:grid grid-cols-3 gap-6 items-center ">
+<section class="max-w-7xl mx-auto px-2 py-1 sm:py-12 ">
+  <div class="sm:grid grid-cols-3 items-center ">
     <!-- Imagen animada que cambia -->
-    <div class="col-span-2 overflow-hidden rounded-lg relative aspect-[16/9] p-0.5 ">
+    <div class="col-span-2 overflow-hidden rounded-lg relative aspect-[16/9] px-0.5 sm:mx-2 ml:mx-4 lg:mx-6 mb-6 ">
       <img
         src="/blond-familly.png"
-        alt="Aire acondicionado 1"
+        alt="Aire acondicionado 1- calcula las frigorías"
         class="w-full h-full object-cover rounded-lg transform transition-transform duration-1000 ease-in-out hover:scale-105 animate-zoomFade"
       />
       <img
         src="/Aires del Rosario.jpg"
-        alt="Aire acondicionado 2"
+        alt="Aire acondicionado 2 - calcula las frigorías"
         class="w-full h-full object-cover absolute top-0 left-0 opacity-0 animate-zoomFade delay-5000"
         style="animation-fill-mode: forwards;"
       />
     </div>
 
     <!-- Card de calculadora -->
-    <div class="rounded-lg shadow-lg p-8 flex flex-col justify-center bg-blue-50 ">
-      <h3 class="text-xl font-semibold mb-4">Calcula cuántas frigorías necesitas para tu ambiente</h3>
-      <p class="mb-6 text-gray-600">
+    <div class="rounded-lg shadow-lg p-4 sm:p-8 flex flex-col justify-center bg-blue-50 ">
+      <h3 class="text-xl font-semibold mb-2 sm:mb-4">Calcula cuántas frigorías necesitas para tu ambiente</h3>
+      <p class="mb-2 sm:mb-6 text-gray-600">
         Descubrí qué aire acondicionado es el ideal para vos con nuestra guía paso a paso.
       </p>
-      <button class="self-start bg-blue-600 text-white px-5 py-3 rounded hover:bg-blue-700 transition">
+      <button class="self-start bg-blue-600 text-white px-3 py-1 rounded hover:bg-blue-700 transition">
         <a href="/calculo">Empezar cálculo</a>
       </button>
     </div>

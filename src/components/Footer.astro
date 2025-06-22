@@ -4,7 +4,7 @@
   <div class="max-w-6xl mx-auto grid gap-8 md:grid-cols-3">
     <!-- Columna 1: Marca -->
     <div>
-      <h3 class="text-xl font-bold text-white mb-2">AireService</h3>
+      <h3 class="logo-footer text-xl font-bold text-white hover:text-blue-400 mb-2">Aires del Rosario</h3>
       <p class="text-sm">
         Instalación, mantenimiento y reparación de aires acondicionados en Rosario y alrededores.
       </p>
@@ -15,7 +15,7 @@
       <h4 class="text-lg font-semibold mb-2 text-white">Navegación</h4>
       <ul class="space-y-2 text-sm">
         <li><a href="/" class="hover:text-blue-400 transition">Inicio</a></li>
-        <li><a href="/servicios" class="hover:text-blue-400 transition">Servicios</a></li>
+        <li><a href={Astro.url.pathname === "/" ? "#servicios" : "/#servicios"} class="hover:text-blue-400 transition">Servicios</a></li>
         <li><a href="/contacto" class="hover:text-blue-400 transition">Contacto</a></li>
       </ul>
     </div>
@@ -54,6 +54,14 @@
 
   <!-- Línea inferior -->
   <div class="mt-10 border-t border-gray-700 pt-6 text-center text-xs text-gray-500">
-    © {new Date().getFullYear()} AireService. Todos los derechos reservados.
+    © {new Date().getFullYear()} AiresdelRosairo. Todos los derechos reservados.
   </div>
 </footer>
+
+
+<style>
+  h3.logo-footer:hover {
+  filter: drop-shadow(0 0 8px white );
+  
+}
+</style>

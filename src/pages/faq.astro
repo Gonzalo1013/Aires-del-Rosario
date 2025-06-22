@@ -1,0 +1,54 @@
+---
+import { getCollection } from 'astro:content';
+import Layout  from '../layouts/Layout.astro';
+import Navbar from '../components/Navbar.astro';
+import Footer from '../components/Footer.astro';
+
+const faqs = await getCollection("preguntasfrecuentes");
+
+
+---
+
+
+<Layout 
+    title="Preguntas Frecuentes - Aires del Rosario - Instalación y reparación de aire acondicionado"
+    description="Servicio profesional de instalación, reparación y mantenimiento de aires acondicionados en Rosario. Calculá frigorías, contactanos y climatizá tu hogar."
+>
+    <Navbar />
+    <section class="text-center text-white p-5 sm:p15 lg:p-30">
+        <div class="">
+            <h1 class="text-2xl sm:text-4xl font-bold mb-4">Preguntas Frecuentes</h1>
+            <p class="mb-4 mx-10 sm:mx-30 lg:mx-80">Aquí encontrarás respuestas a las preguntas más comunes sobre nuestros servicios de instalación y reparación de aires acondicionados.</p>
+        </div>
+        
+        <div class="">
+            <div class="">
+                {
+                    faqs.map((faq) => {
+                        const { slug, data } = faq;
+                        const { question, answer } = data;
+
+                        return (
+                            <article class="bg-blue-100 rounded-lg mx-10 sm:mx-30 lg:mx-60 transition hover:scale-101">
+
+                                <a href={`/faqs/${slug}`} class="mb-2 xl:mb-0">
+                                    <div class="mb-6">
+                                        <h2 
+                                            transition:name={`question-${slug}`}
+                                            class=" text-gray-900 font-semibold mb-2">{question}</h2>
+                                        <p class="text-sm text-gray-700 ">{answer}
+                                            <span class="text-blue-600">leer mas...</span>
+                                        </p>
+                                    </div>
+                                </a>                
+
+                            </article>
+                        );
+                    })
+                }
+            </div>
+        </div>
+        
+    </section>
+    <Footer/>
+</Layout>

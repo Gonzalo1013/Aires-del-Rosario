@@ -1,15 +1,19 @@
 ---
 import Navbar from "../components/Navbar.astro"
 import Layout from "../layouts/Layout.astro"
+import Footer from "../components/Footer.astro"
 ---
-<Layout>
+<Layout
+    title="Aires del Rosario - Instalación y reparación de aire acondicionado"
+    description="Servicio profesional de instalación, reparación y mantenimiento de aires acondicionados en Rosario. Calculá frigorías, contactanos y climatizá tu hogar."
+>
 <Navbar />
     <html lang="es">
         <head>
             <title>Nosotros | Aires</title>
         </head>
         <body class=" text-gray-100">
-            <main class="max-w-2xl mx-4 sm:mx-auto my-16  px-6 md:px-12 lg:px-20 bg-blue-50 ms:rounded-xl">
+            <main class="max-w-2xl mx-4 sm:mx-auto my-16  px-6 md:px-12 lg:px-20 bg-blue-100 ms:rounded-xl">
 
                 <section id="nosotros" class="max-w-5xl mx-auto px-4 py-16">
                 <h1 class="text-2xl sm:text-3xl md:text-4xl font-bold mb-8 text-center text-gray-900 ">¿Quiénes somos?</h1>
@@ -44,4 +48,5 @@ import Layout from "../layouts/Layout.astro"
             </main>
         </body>
     </html>
+    <Footer/>
 </Layout>

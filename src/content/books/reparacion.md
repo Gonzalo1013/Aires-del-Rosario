@@ -1,5 +1,6 @@
 ---
-title: Reparacion de Plaquetas
+title: Reparacion de 
+subtitle: Reparación electrónica de placas inverter y convencionales
 img: reparacion-plaqueta.jpeg
 description: Reparación y diagnóstico de placas electrónicas inverter.
 
@@ -7,10 +8,9 @@ description: Reparación y diagnóstico de placas electrónicas inverter.
 ---
 
 
-hoy en el dia de la fecha estuve codeando un buen rato para ver si hago andar esta mierda
-y tambien estuve jugando con los mancos de mis amigos y no ganamos ni una partida porque somos horribles. 
+Contenido:
+Somos especialistas en diagnóstico y reparación de placas electrónicas de equipos inverter y no inverter, una de nuestras principales fortalezas y diferencial en el mercado. Este tipo de reparaciones requiere conocimiento electrónico avanzado, instrumental técnico y experiencia concreta: por eso, muy pocos técnicos lo ofrecen de manera profesional.
 
-**te queria contar que con chat gpt estuvimos haciendo una hermosa web pero no tan hermosa como
-mi esposa que ella si es hermosa, pero no me entrega la cola rica y redonda que tiene**
+Nuestro laboratorio está equipado con las herramientas necesarias para detectar fallas en componentes SMD, microcontroladores, sensores y fuentes de alimentación, devolviendo funcionalidad a equipos que de otro modo serían descartados.
 
-Ahora se me hace la enojada y viene a mopolestarmemientras yo escribo mi content en yuhv 9¿iu todo sirve
+Además, realizar una reparación de plaqueta muchas veces representa un ahorro significativo frente al reemplazo del repuesto completo, con la ventaja de mantener la originalidad del equipo.

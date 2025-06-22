@@ -6,19 +6,37 @@ import WhatsappButton from "../components/WhatsappButton.astro";
 import "/src/styles/global.css";
 
 
-
+const { title = "Aires del Rosario - Instalación y reparación de aire acondicionado en Rosario", 
+				description = "Servicio profesional de instalación, reparación y mantenimiento de aires acondicionados en Rosario. Calculá frigorías, contactanos y climatizá tu hogar." } = Astro.props;
 ---
 
 <!doctype html>
 <html lang="en">
 	<head>
+		<title>{title}</title>
+		<meta name="description" content={description} />
+		<meta name="viewport" content="width=device-width, initial-scale=1" />
+		<!-- SEO: Palabras clave -->
+		<meta name="keywords" content="aire acondicionado, Rosario, reparación, instalación, mantenimiento, climatización, frigorías, split, service, técnico, hogar, empresa" />
+		<!-- SEO: Open Graph para compartir en redes -->
+		<meta property="og:title" content={title} />
+		<meta property="og:description" content={description} />
+		<meta property="og:image" content="/Aires del Rosario.png" />
+		<meta property="og:type" content="website" />
+		<meta property="og:url" content="https://tusitio.com" />
+		<!-- SEO: Twitter Card -->
+		<meta name="twitter:card" content="summary_large_image" />
+		<meta name="twitter:title" content={title} />
+		<meta name="twitter:description" content={description} />
+		<meta name="twitter:image" content="/Aires del Rosario.png" />
+		<!-- ...otros head... -->
 		<meta charset="UTF-8" />
 		<meta name="viewport" content="width=device-width" />
 		<link class="rounded-full" rel="icon" type="image/svg+xml" href="/Aires del Rosario.jpg" />
 		<meta name="generator" content={Astro.generator} />
-		<title>Aires del Rosario</title>
 		<ClientRouter />
 	</head>
+	
 	<body>
 		<slot />
 		<WhatsappButton />
