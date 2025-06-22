@@ -1,13 +1,13 @@
 ---
 // No necesitas script aquí si el toggle lo manejamos con Alpine o JS más adelante
 ---
-<nav class="bg-gray-100 shadow-md">
+<nav class=" bg-[rgb(31, 29, 48)]  shadow-md">
   <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
     <div class="flex justify-between h-20 items-center">
       <!-- Logo -->
       <div class="flex-shrink-0">
-        <a href="/" class="text-2xl font-bold text-blue-600">
-            <img class="size-40" src="/Aires del Rosario.png" alt="">
+        <a href="/" >
+            <img class="size-40 " src="/Aires del Rosario.png" alt="logo Aires del Rosario" />
         </a>
       </div>
 
@@ -37,10 +37,10 @@
 
       <!-- Menú normal (escondido en móvil) -->
       <div class="hidden md:flex space-x-6">
-        <a href="/" class="text-gray-700 hover:text-blue-600 text-2xl ">Inicio</a>
-        <a href={Astro.url.pathname === "/" ? "#servicios" : "/#servicios"} class="text-gray-700 hover:text-blue-600 text-2xl ">Servicios</a>
-        <a href="/nosotros" class="text-gray-700 hover:text-blue-600 text-2xl ">Nosotros</a>
-        <a href="/contacto" class="text-gray-700 hover:text-blue-600 text-2xl ">Contacto</a>
+        <a href="/" class="text-gray-100 hover:text-blue-600 text-2xl ">Inicio</a>
+        <a href={Astro.url.pathname === "/" ? "#servicios" : "/#servicios"} class="text-gray-100 hover:text-blue-600 text-2xl ">Servicios</a>
+        <a href="/nosotros" class="text-gray-100 hover:text-blue-600 text-2xl ">Nosotros</a>
+        <a href="/contacto" class="text-gray-100 hover:text-blue-600 text-2xl ">Contacto</a>
       </div>
     </div>
 
