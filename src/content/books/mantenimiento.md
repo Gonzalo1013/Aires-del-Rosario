@@ -1,6 +1,6 @@
 ---
 title: Mantenimiento
-img: reparacion.png
+img: mantenimiento1.jpeg
 description: Limpieza profunda de unidades internas y externas.
 
 ---

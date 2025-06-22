@@ -1,6 +1,6 @@
 ---
 title: Instalación
-img: aire-acondicionado.png
+img: instalacion.jpeg
 description: Colocación profesional de equipos split, multisplit e inverter.
 
 

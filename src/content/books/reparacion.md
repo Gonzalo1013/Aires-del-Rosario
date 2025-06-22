@@ -1,6 +1,6 @@
 ---
 title: Reparacion de Plaquetas
-img: plaqueta.png
+img: reparacion-plaqueta.jpeg
 description: Reparación y diagnóstico de placas electrónicas inverter.
 
 

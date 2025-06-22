@@ -1,6 +1,6 @@
 ---
 title: Carga de Gas
-img: aire-acondicionado.png
+img: cargadegas.jpeg
 description: Revisión del circuito frigorífico y recarga de refrigerante.
 
 
