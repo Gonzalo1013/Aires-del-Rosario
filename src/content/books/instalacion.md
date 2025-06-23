@@ -1,13 +1,9 @@
 ---
 title: Instalación
 subtitle: Instalación profesional de aires acondicionados
-img: instalacion.jpeg
+img: aire-promo-realista.png
 description: Colocación profesional de equipos split, multisplit e inverter.
-
-
 ---
-
-
 
 
 En nuestra empresa realizamos instalaciones de equipos de aire acondicionado split, multisplit e inverter con total responsabilidad y precisión. Cada instalación es planificada de acuerdo a las especificaciones del fabricante, las condiciones del ambiente y las necesidades del cliente, cumpliendo con todas las normativas vigentes y respetando las condiciones de garantía del equipo.

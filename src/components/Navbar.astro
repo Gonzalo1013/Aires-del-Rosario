@@ -46,11 +46,12 @@
     </div>
 
     <!-- Menú desplegable (móvil) -->
-    <div id="mobile-menu" class="md:hidden hidden flex-col space-y-2 mt-4">
-      <a href="/" class="text-gray-700 hover:text-blue-600">Inicio</a>
-      <a href={Astro.url.pathname === "/" ? "#servicios" : "/#servicios"} class="text-gray-700 hover:text-blue-600">Servicios</a>
-      <a href="/nosotros" class="text-gray-700 hover:text-blue-600">Nosotros</a>
-      <a href="/contacto" class="text-gray-700 hover:text-blue-600">Contacto</a>
+    <div id="mobile-menu" class="md:hidden space-y-2 mt-4 flex justify-between">
+      <a href="/" class="text-gray-100 hover:text-blue-600">Inicio</a>
+      <a href={Astro.url.pathname === "/" ? "#servicios" : "/#servicios"} class="text-gray-100 hover:text-blue-600">Servicios</a>
+      <a href="/nosotros" class="text-gray-100 hover:text-blue-600">Nosotros</a>
+      <a href="/contacto" class="text-gray-100 hover:text-blue-600">Contacto</a>
+      <a href="/faq" class="text-gray-100 hover:text-blue-600 ">FAQ</a>
     </div>
   </div>
 

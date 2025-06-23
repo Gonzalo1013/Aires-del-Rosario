@@ -11,9 +11,9 @@ let currentIndex = 0;
 ---
 
 <section class="max-w-7xl mx-auto px-2 py-1 sm:py-12 ">
-  <div class="sm:grid grid-cols-3 items-center ">
+  <div class="sm:grid grid-cols-3 grid-rows-2 items-center ">
     <!-- Imagen animada que cambia -->
-    <div class="col-span-2 overflow-hidden rounded-lg relative aspect-[16/9] px-0.5 sm:mx-2 ml:mx-4 lg:mx-6 mb-6 ">
+    <div class="col-span-2 row-span-2 overflow-hidden rounded-lg relative aspect-[16/10] px-0.5 sm:mx-2 ml:mx-4 lg:mx-6 mb-6 sm:mb-0 ">
       <img
         src="/blond-familly.png"
         alt="Aire acondicionado 1- calcula las frigorías"
@@ -27,15 +27,33 @@ let currentIndex = 0;
       />
     </div>
 
-    <!-- Card de calculadora -->
-    <div class="rounded-lg shadow-lg p-4 sm:p-8 flex flex-col justify-center bg-blue-50 ">
-      <h3 class="text-xl font-semibold mb-2 sm:mb-4">Calcula cuántas frigorías necesitas para tu ambiente</h3>
-      <p class="mb-2 sm:mb-6 text-gray-600">
-        Descubrí qué aire acondicionado es el ideal para vos con nuestra guía paso a paso.
-      </p>
-      <button class="self-start bg-blue-600 text-white px-3 py-1 rounded hover:bg-blue-700 transition">
-        <a href="/calculo">Empezar cálculo</a>
-      </button>
+    <div class="col-span-1 row-span-2 sm:mx-2 ml:mx-4 lg:mx-6 gap-4">
+      <!-- Card de logo Aires del Rosario -->
+      <div class="logo-airesdelrosario hidden sm:block mb-4">
+        <img 
+        src="/Aires del Rosario.png " 
+        alt="Logo - Aires del Rosairo"
+        class=" border-2 h-60 w-200 rounded-xl bg-blue-50 p-6 mb-4 " 
+        />
+      </div>
+      
+      <!-- Card de calculadora -->
+      <div class="rounded-lg shadow-lg p-4 sm:p-8 flex flex-col justify-center bg-blue-50">
+        <h3 class="text-xl font-semibold mb-2 sm:mb-4">Calcula cuántas frigorías necesitas para tu ambiente</h3>
+        <p class="mb-2 sm:mb-6 text-gray-600">
+          Descubrí qué aire acondicionado es el ideal para vos con nuestra guía paso a paso.
+        </p>
+        <button class="self-start bg-blue-600 text-white px-3 py-1 rounded hover:bg-blue-700 transition">
+          <a href="/calculo">Empezar cálculo</a>
+        </button>
+      </div>
     </div>
   </div>
 </section>
+
+
+<!-- <style>
+  .logo-airesdelrosario{
+    display: none
+  }
+</style> -->
