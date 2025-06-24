@@ -1,4 +1,5 @@
 ---
+import  FrigoriaWizard  from "../components/FrigoriasWizard"
 import Layout from "../layouts/Layout.astro"
 
 import Navbar from "../components/Navbar.astro"
@@ -10,18 +11,10 @@ import Footer from "../components/Footer.astro";
     description="Servicio profesional de instalación, reparación y mantenimiento de aires acondicionados en Rosario. Calculá frigorías, contactanos y climatizá tu hogar."
 >
     <Navbar />
-    <html lang="es">
-        <head>
-            <title>Cálculo de Frigorías | Aires</title>
-        </head>
-        <body class="bg-gray-50 text-gray-900">
-            <main class="max-w-2xl mx-auto px-4 py-16">
-                <h1 class="text-3xl font-bold mb-6 text-center">Calculá cuántas frigorías necesitás</h1>
-                <div class="h-50">
-
-                </div>
-            </main>
-        </body>
-    </html>
+        <section class="bg-blue-50 max-w-2xl rounded-2xl sm:m-auto my-8 p-2 sm:p-4 mx-2">
+            <h1 class="text-3xl font-bold mb-6 text-center">Calculá cuántas frigorías necesitás</h1>
+            <FrigoriaWizard client:load/>
+        </section>
+               
     <Footer/>
 </Layout>
