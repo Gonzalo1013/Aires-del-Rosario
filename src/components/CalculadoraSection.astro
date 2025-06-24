@@ -20,9 +20,9 @@ let currentIndex = 0;
         class="w-full h-full object-cover rounded-lg transform transition-transform duration-1000 ease-in-out hover:scale-105 animate-zoomFade"
       />
       <img
-        src="/Aires del Rosario.jpg"
+        src="/living.png"
         alt="Aire acondicionado 2 - calcula las frigorías"
-        class="w-full h-full object-cover absolute top-0 left-0 opacity-0 animate-zoomFade delay-5000"
+        class="glaciar w-full h-full object-cover absolute top-0 left-0 opacity-0 animate-zoomFade delay-5000"
         style="animation-fill-mode: forwards;"
       />
     </div>
@@ -33,23 +33,35 @@ let currentIndex = 0;
         <img 
         src="/Aires del Rosario.png " 
         alt="Logo - Aires del Rosairo"
-        class=" border-2 h-60 w-200 rounded-xl bg-blue-50 p-6 mb-4 " 
+        class="glaciar h-60 w-200 rounded-xl bg-blue-50 p-6 mb-4 " 
         />
       </div>
       
       <!-- Card de calculadora -->
-      <div class="rounded-lg shadow-lg p-4 sm:p-8 flex flex-col justify-center bg-blue-50">
+      <div class="calc rounded-lg shadow-lg p-4 sm:p-8 flex flex-col justify-center]">
         <h3 class="text-xl font-semibold mb-2 sm:mb-4">Calcula cuántas frigorías necesitas para tu ambiente</h3>
-        <p class="mb-2 sm:mb-6 text-gray-600">
+        <p class="mb-2 sm:mb-6 text-gray-900">
           Descubrí qué aire acondicionado es el ideal para vos con nuestra guía paso a paso.
         </p>
-        <button class="self-start bg-black text-white px-3 py-1 rounded hover:bg-blue-700 transition">
-          <a href="/calculo">Empezar cálculo</a>
+        <button class="self-start bg-blue-600 text-white px-3 py-1 rounded hover:bg-blue-700 transition">
+          <a href="/calculo">Empezar a cálcular</a>
         </button>
       </div>
     </div>
   </div>
 </section>
+
+<style>
+  .calc{
+    background-image: url(calc-frigorias.png);
+    background-size:cover;
+
+  }
+  .glaciar{
+    background-image: url(glaciar.png);
+    background-size:cover;  
+  }
+</style>
 
 
 <!-- Card de calculadora -->
