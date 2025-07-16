@@ -3,55 +3,53 @@ import { getCollection, render } from 'astro:content';
 import Layout from '../../layouts/Layout.astro';
 
 export async function getStaticPaths() {
-    const books = await getCollection("books");
-    return books.map((book) => ({
-        params: {id: book.slug},    
-        props: { book }
-    }))
+  const books = await getCollection('books');
+  return books.map((book) => ({
+    params: { id: book.slug },
+    props: { book },
+  }));
 }
 
-const { book } = Astro.props
-const { data, slug } = book
-const { title, img, description, subtitle } = data 
+const { book } = Astro.props;
+const { data } = book;
+const { title, img, subtitle } = data;
 
-const { Content } = await render(book)
+const { Content } = await render(book);
 
-export const prerender = true
+export const prerender = true;
 ---
 
-<Layout 
-    title={`${title} - Aires del Rosario - Instalación y reparación de aire acondicionado`}
-    description="Servicio profesional de instalación, reparación y mantenimiento de aires acondicionados en Rosario. Calculá frigorías, contactanos y climatizá tu hogar."
+<Layout
+  title={`Aires del Rosario | ${title}`}
+  description="Servicio profesional de instalación, reparación y mantenimiento de aires acondicionados en Rosario. Calculá frigorías, contactanos y climatizá tu hogar."
 >
-    <section class="flex justify-center border-2 text-center text-white p-5 sm:p20 lg:p-50">
-        
-        <div class="sm:flex gap-12">
-            <aside class="flex flex-col item-center gap-4">
-                <a href="/"
-                   class="bg-blue-400 rounded-full sm:rounded-2xl hover:bg-blue-700 transition opacity-100 text-center sm:text-xl md:text-2xl px-4"
-                   >
-                   ⬅️ volver atrás
-                </a>
-                <img transition:name={`img-${slug}`} class="w-72 h-auto rounded" src={`/${img}`} alt={title}>
-                
-
-            </aside>
-            
-            <main class="max-w-xl ">
-                <h1 transition:name={`title-${slug}`} class=" text-2xl sm:text-4xl font-bold mb-4">{subtitle}</h1>
-                <div class="prose prose-invert">
-                    <Content/>
-                </div>
-                
-            </main>
-            
-        </div>
-    </section>
+  <section
+    class="card-container mt-10 mb-6 max-w-sm sm:max-w-md md:max-w-3xl lg:max-w-6xl mx-auto"
+    style={`background: url(/${img}) center center / cover no-repeat`}
+  >
+    <div class="card">
+      <h2 class="text-5xl pb-0.5">{title}</h2>
+      <p class="text-2xl pb-4">{subtitle}</p>
+      <Content />
+    </div>
+  </section>
 </Layout>
 
-
 <style>
-    section {
-        background-color: rgb(31, 29, 48);
-    }
+  .card-container {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 100vh;
+  }
+
+  .card {
+    color: white;
+    text-align: center;
+    width: 800px;
+    padding: 2rem 3rem;
+    border: 3px solid white;
+    box-shadow: 0 0 25px #222;
+    backdrop-filter: blur(80px);
+  }
 </style>

@@ -1,52 +1,107 @@
 ---
-import Navbar from "../components/Navbar.astro"
-import Layout from "../layouts/Layout.astro"
-import Footer from "../components/Footer.astro"
+import Layout from '../layouts/Layout.astro';
 ---
+
 <Layout
-    title="Aires del Rosario - Instalación y reparación de aire acondicionado"
-    description="Servicio profesional de instalación, reparación y mantenimiento de aires acondicionados en Rosario. Calculá frigorías, contactanos y climatizá tu hogar."
+  title="Aires del Rosario | Nosotros"
+  description="Servicio profesional de instalación, reparación y mantenimiento de aires acondicionados en Rosario. Calculá frigorías, contactanos y climatizá tu hogar."
 >
-<Navbar />
-    <html lang="es">
-        <head>
-            <title>Nosotros | Aires</title>
-        </head>
-        <body class=" text-gray-100">
-            <main class="max-w-2xl mx-4 sm:mx-auto my-16  px-6 md:px-12 lg:px-20 bg-blue-100 ms:rounded-xl">
+  <section
+    class="max-w-sm sm:max-w-md md:max-w-3xl lg:max-w-6xl mx-auto grid grid-cols-1 lg:grid-cols-2 min-h-dvh"
+  >
+    <div
+      class="hidden lg:block sticky top-0 self-start pt-10 ml-[-160px] h-dvh"
+    >
+      <img
+        src="/Controles.png"
+        alt="Controles de remoto de aires acondicionados"
+        class="object-contain h-full"
+      />
+    </div>
+    <div class="overflow-y-auto h-full scrollbar-hidden pr-10 pl-10">
+      <h1
+        class="text-2xl sm:text-3xl md:text-4xl font-bold mb-8 pt-10 text-center text-gray-200"
+      >
+        ¿Quiénes somos?
+      </h1>
 
-                <section id="nosotros" class="max-w-5xl mx-auto px-4 py-16">
-                <h1 class="text-2xl sm:text-3xl md:text-4xl font-bold mb-8 text-center text-gray-900 ">¿Quiénes somos?</h1>
-                
-                <p class="text-lg mb-8 text-gray-700 leading-relaxed">
-                    Somos una empresa especializada en la instalación, mantenimiento y reparación de sistemas de aire acondicionado, con una sólida trayectoria en el rubro desde 2017. Nos enorgullece ofrecer soluciones integrales para hogares, oficinas y comercios, destacándonos por nuestra experiencia en la reparación de placas electrónicas de equipos inverter, un servicio altamente demandado y escaso en el mercado.
-                </p>
+      <p class="text-lg mb-8 text-gray-200 leading-relaxed">
+        Somos una empresa especializada en la instalación, mantenimiento y
+        reparación de sistemas de aire acondicionado, con una sólida trayectoria
+        en el rubro desde 2017. Nos enorgullece ofrecer soluciones integrales
+        para hogares, oficinas y comercios, destacándonos por nuestra
+        experiencia en la reparación de placas electrónicas de equipos inverter,
+        un servicio altamente demandado y escaso en el mercado.
+      </p>
 
-                <h2 class="text-2xl font-bold mb-4 text-gray-900">🛠️ Nuestros servicios incluyen:</h2>
-                <ul class="list-disc list-inside mb-8 text-gray-700 space-y-2">
-                    <li><strong>Instalación profesional</strong>: Realizamos instalaciones de equipos de aire acondicionado con materiales de alta calidad y siguiendo los estándares del fabricante, asegurando un rendimiento óptimo y una larga vida útil del equipo.</li>
-                    <li><strong>Reparación de placas electrónicas</strong>: Contamos con técnicos capacitados para diagnosticar y reparar fallas en placas electrónicas de equipos inverter, una especialidad que nos diferencia en el mercado.</li>
-                    <li><strong>Mantenimiento preventivo y correctivo</strong>: Ofrecemos servicios de mantenimiento para garantizar el funcionamiento eficiente de los equipos, previniendo posibles averías y prolongando su vida útil.</li>
-                    <li><strong>Asesoramiento técnico personalizado</strong>: Brindamos orientación sobre la elección del equipo adecuado según las necesidades específicas de cada cliente, optimizando el consumo energético y el confort.</li>
-                </ul>
+      <h2 class="text-2xl font-bold mb-4 text-gray-300">
+        🛠️ Nuestros servicios incluyen:
+      </h2>
+      <ul class="list-disc list-inside mb-8 text-gray-300 space-y-2">
+        <li>
+          <strong>Instalación profesional</strong>: Realizamos instalaciones de
+          equipos de aire acondicionado con materiales de alta calidad y
+          siguiendo los estándares del fabricante, asegurando un rendimiento
+          óptimo y una larga vida útil del equipo.
+        </li>
+        <li>
+          <strong>Reparación de placas electrónicas</strong>: Contamos con
+          técnicos capacitados para diagnosticar y reparar fallas en placas
+          electrónicas de equipos inverter, una especialidad que nos diferencia
+          en el mercado.
+        </li>
+        <li>
+          <strong>Mantenimiento preventivo y correctivo</strong>: Ofrecemos
+          servicios de mantenimiento para garantizar el funcionamiento eficiente
+          de los equipos, previniendo posibles averías y prolongando su vida
+          útil.
+        </li>
+        <li>
+          <strong>Asesoramiento técnico personalizado</strong>: Brindamos
+          orientación sobre la elección del equipo adecuado según las
+          necesidades específicas de cada cliente, optimizando el consumo
+          energético y el confort.
+        </li>
+      </ul>
 
-                <h2 class="text-2xl font-bold mb-4 text-gray-900">🎓 ¿Por qué elegirnos?</h2>
-                <ul class="list-disc list-inside mb-8 text-gray-700 space-y-2">
-                    <li><strong>Experiencia y trayectoria</strong>: Más de 7 años en el rubro, con un historial comprobado de trabajos exitosos y clientes satisfechos.</li>
-                    <li><strong>Técnicos matriculados</strong>: Todos nuestros profesionales están habilitados por la Cámara Argentina de Calefacción, Aire Acondicionado y Ventilación (C.A.C.A.A.V.), cumpliendo con las normativas vigentes.</li>
-                    <li><strong>Especialización en tecnología inverter</strong>: Nos destacamos por nuestra capacidad para reparar placas electrónicas de equipos inverter, una habilidad que pocos técnicos poseen.</li>
-                    <li><strong>Compromiso con la calidad y el servicio</strong>: Nos esforzamos por brindar un servicio de excelencia, con atención personalizada y soluciones efectivas para cada cliente.</li>
-                </ul>
+      <h2 class="text-2xl font-bold mb-4 text-gray-300">
+        🎓 ¿Por qué elegirnos?
+      </h2>
+      <ul class="list-disc list-inside mb-8 text-gray-300 space-y-2">
+        <li>
+          <strong>Experiencia y trayectoria</strong>: Más de 7 años en el rubro,
+          con un historial comprobado de trabajos exitosos y clientes
+          satisfechos.
+        </li>
+        <li>
+          <strong>Técnicos matriculados</strong>: Todos nuestros profesionales
+          están habilitados por la Cámara Argentina de Calefacción, Aire
+          Acondicionado y Ventilación (C.A.C.A.A.V.), cumpliendo con las
+          normativas vigentes.
+        </li>
+        <li>
+          <strong>Especialización en tecnología inverter</strong>: Nos
+          destacamos por nuestra capacidad para reparar placas electrónicas de
+          equipos inverter, una habilidad que pocos técnicos poseen.
+        </li>
+        <li>
+          <strong>Compromiso con la calidad y el servicio</strong>: Nos
+          esforzamos por brindar un servicio de excelencia, con atención
+          personalizada y soluciones efectivas para cada cliente.
+        </li>
+      </ul>
 
-                <h2 class="text-2xl font-bold mb-4 text-gray-900">📍 ¿Dónde estamos?</h2>
-                <p class="text-lg text-gray-700 leading-relaxed">
-                    Atendemos en Rosario y alrededores, ofreciendo servicios rápidos y eficientes para satisfacer las necesidades de nuestros clientes.
-                </p>
-                </section>
-
-                
-            </main>
-        </body>
-    </html>
-    <Footer/>
+      <h2 class="text-2xl font-bold mb-4 text-gray-300">📍 ¿Dónde estamos?</h2>
+      <p class="text-lg text-gray-300 leading-relaxed mb-12">
+        Atendemos en Rosario y alrededores, ofreciendo servicios rápidos y
+        eficientes para satisfacer las necesidades de nuestros clientes.
+      </p>
+    </div>
+  </section>
 </Layout>
+
+<style>
+  .scrollbar-hidden::-webkit-scrollbar {
+    display: none;
+  }
+</style>

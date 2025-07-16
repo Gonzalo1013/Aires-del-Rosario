@@ -1,20 +1,18 @@
 ---
-import  FrigoriaWizard  from "../components/FrigoriasWizard"
-import Layout from "../layouts/Layout.astro"
-
-import Navbar from "../components/Navbar.astro"
-import Footer from "../components/Footer.astro";
-
+import FrigoriaWizard from '../components/FrigoriasWizard';
+import Layout from '../layouts/Layout.astro';
 ---
+
 <Layout
-    title="Aires del Rosario - Instalación y reparación de aire acondicionado"
-    description="Servicio profesional de instalación, reparación y mantenimiento de aires acondicionados en Rosario. Calculá frigorías, contactanos y climatizá tu hogar."
+  title="Aires del Rosario | Calculadora de frigorías"
+  description="Servicio profesional de instalación, reparación y mantenimiento de aires acondicionados en Rosario. Calculá frigorías, contactanos y climatizá tu hogar."
 >
-    <Navbar />
-        <section class="bg-blue-50 max-w-2xl rounded-2xl sm:m-auto my-8 p-2 sm:p-4 mx-2">
-            <h1 class="text-3xl font-bold mb-6 text-center">Calculá cuántas frigorías necesitás</h1>
-            <FrigoriaWizard client:load/>
-        </section>
-               
-    <Footer/>
+  <section
+    class="bg-blue-50 max-w-sm sm:max-w-md md:max-w-3xl lg:max-w-6xl mx-auto mt-10 mb-12 p-10 rounded-2xl md:mb-48 lg:mb-12"
+  >
+    <h1 class="text-3xl font-bold mb-6 text-center">
+      Calculá cuántas frigorías necesitás
+    </h1>
+    <FrigoriaWizard client:load />
+  </section>
 </Layout>

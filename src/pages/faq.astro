@@ -1,54 +1,284 @@
 ---
-import { getCollection } from 'astro:content';
-import Layout  from '../layouts/Layout.astro';
-import Navbar from '../components/Navbar.astro';
-import Footer from '../components/Footer.astro';
-
-const faqs = await getCollection("preguntasfrecuentes");
-
-
+import Layout from '../layouts/Layout.astro';
 ---
 
-
-<Layout 
-    title="Preguntas Frecuentes - Aires del Rosario - Instalación y reparación de aire acondicionado"
-    description="Servicio profesional de instalación, reparación y mantenimiento de aires acondicionados en Rosario. Calculá frigorías, contactanos y climatizá tu hogar."
+<Layout
+  title="Aires del Rosario | Preguntas Frecuentes"
+  description="Servicio profesional de instalación, reparación y mantenimiento de aires acondicionados en Rosario. Calculá frigorías, contactanos y climatizá tu hogar."
 >
-    <Navbar />
-    <section class="text-center text-white p-5 sm:p15 lg:p-30">
-        <div class="">
-            <h1 class="text-2xl sm:text-4xl font-bold mb-4">Preguntas Frecuentes</h1>
-            <p class="mb-4 mx-10 sm:mx-30 lg:mx-80">Aquí encontrarás respuestas a las preguntas más comunes sobre nuestros servicios de instalación y reparación de aires acondicionados.</p>
-        </div>
-        
-        <div class="">
-            <div class="">
-                {
-                    faqs.map((faq) => {
-                        const { slug, data } = faq;
-                        const { question, answer } = data;
-
-                        return (
-                            <article class="bg-blue-100 rounded-lg mx-10 sm:mx-30 lg:mx-60 transition hover:scale-101">
-
-                                <a href={`/faqs/${slug}`} class="mb-2 xl:mb-0">
-                                    <div class="mb-6">
-                                        <h2 
-                                            transition:name={`question-${slug}`}
-                                            class=" text-gray-900 font-semibold mb-2">{question}</h2>
-                                        <p class="text-sm text-gray-700 ">{answer}
-                                            <span class="text-blue-600">leer mas...</span>
-                                        </p>
-                                    </div>
-                                </a>                
-
-                            </article>
-                        );
-                    })
-                }
-            </div>
-        </div>
-        
-    </section>
-    <Footer/>
+  <section
+    class="max-w-sm sm:max-w-md md:max-w-3xl lg:max-w-6xl mx-auto pt-10 pb-12"
+  >
+    <h1
+      class="text-2xl sm:text-3xl md:text-4xl font-bold mb-8 text-center text-gray-200"
+    >
+      Preguntas Frecuentes
+    </h1>
+    <div class="acordeon">
+      <input
+        type="checkbox"
+        name="acordeon"
+        id="btn-acordeon1"
+        class="btn-acordeon"
+      />
+      <label for="btn-acordeon1">
+        ¿Cómo puedo calcular las frigorías necesarias para mi espacio?
+      </label>
+      <div class="contenido-acordeon">
+        <p>
+          Se suele tomar como referencia 100 frigorías por m².
+          <br />
+          <br />
+          Por ej.: un cuarto de 30m² necesita unas 3.000 frigorías. Si el espacio
+          tiene muchas ventanas, techos altos o exposición solar, es recomendable
+          aumentar a 120-130fg/m².
+          <br />
+          <br />
+          La fórmula más precisa es: largo x ancho x alto x 50 (frigorías/h), o bien
+          ajustar según condiciones específicas como orientación, aislamiento o carga
+          térmica.
+        </p>
+      </div>
+    </div>
+    <div class="acordeon">
+      <input
+        type="checkbox"
+        name="acordeon"
+        id="btn-acordeon2"
+        class="btn-acordeon"
+      />
+      <label for="btn-acordeon2">
+        ¿Qué tipo de mantenimiento necesita un aire acondicionado?
+      </label>
+      <div class="contenido-acordeon">
+        <p>
+          Recomendamos un servicio anual que incluya:
+          <br />
+          <br />
+          Limpieza de filtros y serpentines (evaporador y condensador);
+          <br />
+          <br />
+          Control de presión de refrigerante;
+          <br />
+          <br />
+          Revisión del drenaje;
+          <br />
+          <br />
+          Comprobación de componentes eléctricos (capacitores, termostatos);
+          <br />
+          <br />
+          En equipos inverter, verificación de sensores electrónicos.
+          <br />
+          <br />
+          Así prolongás vida útil, evitás averías y optimizás consumo energético.
+        </p>
+      </div>
+    </div>
+    <div class="acordeon">
+      <input
+        type="checkbox"
+        name="acordeon"
+        id="btn-acordeon3"
+        class="btn-acordeon"
+      />
+      <label for="btn-acordeon3"> ¿Ofrecen garantía en sus servicios? </label>
+      <div class="contenido-acordeon">
+        <p>
+          Claro, todos nuestros trabajos tienen garantía profesional.
+          <br />
+          Cumplimos con los requisitos del fabricante y la normativa vigente.
+          <br />
+          Además brindamos cobertura propia sobre mano de obra por un período determinado,
+          según el tipo de servicio.
+          <br />
+          <br />
+          Consultanos y te lo detallamos por escrito.
+        </p>
+      </div>
+    </div>
+    <div class="acordeon">
+      <input
+        type="checkbox"
+        name="acordeon"
+        id="btn-acordeon4"
+        class="btn-acordeon"
+      />
+      <label for="btn-acordeon4">
+        ¿Cuánto tiempo demora la instalación de un aire acondicionado?
+      </label>
+      <div class="contenido-acordeon">
+        <p>
+          Una instalación profesional suele durar entre 2 y 4 horas, dependiendo
+          de:
+          <br />
+          <br />
+          Tipo de equipo (split simple, multi-split, inverter);
+          <br />
+          <br />
+          Complejidad de la conexión (tablero, tubería, ubicación);
+          <br />
+          <br />
+          Acceso al espacio y condiciones estructurales.
+          <br />
+          <br />
+          Nuestros técnicos matriculados planifican previamente para garantizar eficiencia,
+          limpieza y cumplimiento de estándares.
+        </p>
+      </div>
+    </div>
+    <div class="acordeon">
+      <input
+        type="checkbox"
+        name="acordeon"
+        id="btn-acordeon5"
+        class="btn-acordeon"
+      />
+      <label for="btn-acordeon5">
+        ¿Qué marcas de aires acondicionados recomiendan?
+      </label>
+      <div class="contenido-acordeon">
+        <p>
+          Trabajamos e instalamos todas las marcas del mercado: Samsung, LG,
+          Midea, Surrey, Carrier, BGH, Hitachi, Sanyo, York, Tophouse, Noblex,
+          Philips, Gafa, Electra, entre otras.
+          <br />
+          La elección depende de tus necesidades —potencia, tipo de tecnología inverter,
+          presupuesto y disponibilidad de postventa—.
+          <br />
+          Te asesoramos para que elijas la mejor opción.
+        </p>
+      </div>
+    </div>
+    <div class="acordeon">
+      <input
+        type="checkbox"
+        name="acordeon"
+        id="btn-acordeon6"
+        class="btn-acordeon"
+      />
+      <label for="btn-acordeon6">
+        ¿Cómo puedo ahorrar en mis facturas de electricidad?
+      </label>
+      <div class="contenido-acordeon">
+        <p>
+          Usá una configuración razonable (22-24°C) y evitá temperaturas
+          demasiado bajas.
+          <br />
+          Programá termostatos o modos “eco”.
+          <br />
+          Mantené filtros limpios para mejorar la eficiencia.
+          <br />
+          Complementá con ventiladores y cerrá cortinas para reducir carga térmica.
+        </p>
+      </div>
+    </div>
+    <div class="acordeon">
+      <input
+        type="checkbox"
+        name="acordeon"
+        id="btn-acordeon7"
+        class="btn-acordeon"
+      />
+      <label for="btn-acordeon7">
+        ¿Con qué frecuencia debería limpiar el filtro del aire?
+      </label>
+      <div class="contenido-acordeon">
+        <p>
+          La vida útil depende del uso, mascotas y calidad del aire.
+          <br />
+          Como regla general:
+          <br />
+          <br />
+          Residencias sin mascotas: cada 2-3 meses.
+          <br />
+          <br />
+          Con mascotas o alergias: cada 1-2 meses.
+        </p>
+      </div>
+    </div>
+    <div class="acordeon">
+      <input
+        type="checkbox"
+        name="acordeon"
+        id="btn-acordeon8"
+        class="btn-acordeon"
+      />
+      <label for="btn-acordeon8">
+        ¿Por qué mi aire acondicionado gotea agua o no enfría bien?
+      </label>
+      <div class="contenido-acordeon">
+        <p>
+          Posibles causas:
+          <br />
+          <br />
+          Drenaje tapado o serpentines congelados;
+          <br />
+          <br />
+          Baja carga de gas (fuga), filtros sucios o fallas eléctricas.
+          <br />
+          <br />
+          Ante estas situaciones, es mejor llamar a un técnico matriculado, ya que
+          incluye diagnóstico correcto y solución profesional
+        </p>
+      </div>
+    </div>
+    <div class="acordeon">
+      <input
+        type="checkbox"
+        name="acordeon"
+        id="btn-acordeon9"
+        class="btn-acordeon"
+      />
+      <label for="btn-acordeon9">
+        ¿Cada cuánto debe revisarse el gas refrigerante?
+      </label>
+      <div class="contenido-acordeon">
+        <p>
+          Durante el mantenimiento anual verificamos niveles de gas y si hay
+          fugas.
+          <br />
+          Si existe una fuga, se debe reparar antes de recargar, para evitar daños
+          ambientales y pérdida de eficiencia
+        </p>
+      </div>
+    </div>
+  </section>
 </Layout>
+
+<style>
+  .acordeon {
+    background-color: white;
+  }
+
+  .acordeon label {
+    display: block;
+    padding: 20px;
+    font-size: 20px;
+    background: #1c1c1c;
+    color: #fff;
+    cursor: pointer;
+    margin-bottom: 2px;
+    transition: all 300ms ease;
+  }
+
+  .acordeon label:hover {
+    background: #2e2e2e;
+  }
+
+  .acordeon .contenido-acordeon {
+    padding: 0px;
+    margin: 0px 20px;
+    max-height: 0px;
+    overflow: hidden;
+    transition: all 300ms ease;
+  }
+
+  .btn-acordeon:checked ~ .contenido-acordeon {
+    max-height: 600px;
+    padding: 15px 0px;
+  }
+
+  .btn-acordeon {
+    display: none;
+  }
+</style>

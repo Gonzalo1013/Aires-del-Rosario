@@ -1,39 +1,60 @@
-import { useState } from "react";
-import { Progress } from "@/components/ui/progress";
-import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
-import { cn } from "@/lib/utils";
+import { useState } from 'react';
+import { Progress } from '@/components/ui/progress';
+import { Button } from '@/components/ui/button';
+import { Input } from '@/components/ui/input';
 
 const steps = [
-  "Dimensiones del ambiente",
-  "Orientación",
-  "Tipo de ambiente",
-  "Cantidad de personas",
-  "Equipos electrónicos",
-  "Aislamiento y ventanas",
+  'Dimensiones del ambiente',
+  'Orientación',
+  'Tipo de ambiente',
+  'Cantidad de personas',
+  'Equipos electrónicos',
+  'Aislamiento y ventanas',
 ];
+
+const initialFormData = {
+  largo: '',
+  ancho: '',
+  alto: '',
+  orientacion: '',
+  tipo: '',
+  personas: '',
+  equipos: '',
+  aislamiento: '',
+};
 
 export default function FrigoriaWizard() {
   const [step, setStep] = useState(0);
-  const [formData, setFormData] = useState({
-    largo: "",
-    ancho: "",
-    alto: "",
-    orientacion: "",
-    tipo: "",
-    personas: "",
-    equipos: "",
-    aislamiento: "",
-  });
+  const [formData, setFormData] = useState(initialFormData);
   const [resultado, setResultado] = useState<string | null>(null);
 
   const totalSteps = steps.length;
 
+  const isFormValid = () => {
+    const { largo, ancho, alto, personas, equipos } = formData;
+    return (
+      largo.trim() !== '' &&
+      ancho.trim() !== '' &&
+      alto.trim() !== '' &&
+      personas.trim() !== '' &&
+      equipos.trim() !== '' &&
+      !isNaN(Number(largo)) &&
+      !isNaN(Number(ancho)) &&
+      !isNaN(Number(alto)) &&
+      !isNaN(Number(personas)) &&
+      !isNaN(Number(equipos))
+    );
+  };
+
   const handleNext = () => {
-    if (step < totalSteps - 1) {
-      setStep((prev) => prev + 1);
-    } else {
+    if (step === totalSteps - 1) {
+      if (!isFormValid()) {
+        alert('Por favor, completa todos los campos correctamente.');
+        return;
+      }
       calcularFrigorias();
+    } else {
+      setStep((prev) => prev + 1);
     }
   };
 
@@ -56,17 +77,6 @@ export default function FrigoriaWizard() {
 
     const resultadoTexto = `Al menos necesitás ${Math.round(frigoriasBase)} frigorías.`;
     setResultado(resultadoTexto);
-    setStep(0);
-    setFormData({
-      largo: "",
-      ancho: "",
-      alto: "",
-      orientacion: "",
-      tipo: "",
-      personas: "",
-      equipos: "",
-      aislamiento: "",
-    });
   };
 
   const renderStep = () => {
@@ -78,19 +88,19 @@ export default function FrigoriaWizard() {
               type="number"
               placeholder="Largo en metros"
               value={formData.largo}
-              onChange={(e) => handleChange("largo", e.target.value)}
+              onChange={(e) => handleChange('largo', e.target.value)}
             />
             <Input
               type="number"
               placeholder="Ancho en metros"
               value={formData.ancho}
-              onChange={(e) => handleChange("ancho", e.target.value)}
+              onChange={(e) => handleChange('ancho', e.target.value)}
             />
             <Input
               type="number"
               placeholder="Alto en metros"
               value={formData.alto}
-              onChange={(e) => handleChange("alto", e.target.value)}
+              onChange={(e) => handleChange('alto', e.target.value)}
             />
           </div>
         );
@@ -99,7 +109,7 @@ export default function FrigoriaWizard() {
           <Input
             placeholder="Ej: Norte, Sur, Este, Oeste"
             value={formData.orientacion}
-            onChange={(e) => handleChange("orientacion", e.target.value)}
+            onChange={(e) => handleChange('orientacion', e.target.value)}
           />
         );
       case 2:
@@ -107,7 +117,7 @@ export default function FrigoriaWizard() {
           <Input
             placeholder="Ej: Dormitorio, Living, Oficina"
             value={formData.tipo}
-            onChange={(e) => handleChange("tipo", e.target.value)}
+            onChange={(e) => handleChange('tipo', e.target.value)}
           />
         );
       case 3:
@@ -116,7 +126,7 @@ export default function FrigoriaWizard() {
             type="number"
             placeholder="Cantidad de personas"
             value={formData.personas}
-            onChange={(e) => handleChange("personas", e.target.value)}
+            onChange={(e) => handleChange('personas', e.target.value)}
           />
         );
       case 4:
@@ -125,7 +135,7 @@ export default function FrigoriaWizard() {
             type="number"
             placeholder="Cantidad de equipos electrónicos"
             value={formData.equipos}
-            onChange={(e) => handleChange("equipos", e.target.value)}
+            onChange={(e) => handleChange('equipos', e.target.value)}
           />
         );
       case 5:
@@ -133,7 +143,7 @@ export default function FrigoriaWizard() {
           <Input
             placeholder="Ej: Buen aislamiento, Vidrio simple, Cortinas"
             value={formData.aislamiento}
-            onChange={(e) => handleChange("aislamiento", e.target.value)}
+            onChange={(e) => handleChange('aislamiento', e.target.value)}
           />
         );
       default:
@@ -143,7 +153,9 @@ export default function FrigoriaWizard() {
 
   return (
     <div className="max-w-xl mx-auto p-4 space-y-6">
-      <h2 className="text-2xl font-semibold text-center">Calculadora de Frigorías</h2>
+      <h2 className="text-2xl font-semibold text-center">
+        Calculadora de Frigorías
+      </h2>
       <Progress value={(step / (totalSteps - 1)) * 100} />
       <div className="text-lg font-medium text-gray-700">{steps[step]}</div>
       <div>{renderStep()}</div>
@@ -152,7 +164,7 @@ export default function FrigoriaWizard() {
           Atrás
         </Button>
         <Button onClick={handleNext}>
-          {step === totalSteps - 1 ? "Calcular" : "Siguiente"}
+          {step === totalSteps - 1 ? 'Calcular' : 'Siguiente'}
         </Button>
       </div>
       {resultado && (

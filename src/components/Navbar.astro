@@ -1,13 +1,22 @@
 ---
-// No necesitas script aquí si el toggle lo manejamos con Alpine o JS más adelante
+export const prerender = false;
 ---
-<nav class=" bg-[rgb(31, 29, 48)]  shadow-md">
-  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+
+<nav
+  class="header bg-[#124f90ca] fixed top-4 left-4 right-4 z-50 rounded-xl shadow-md"
+>
+  <div
+    class="max-w-sm sm:max-w-md md:max-w-3xl lg:max-w-6xl mx-auto px-4 lg:px-0"
+  >
     <div class="flex justify-between h-20 items-center">
       <!-- Logo -->
       <div class="flex-shrink-0">
-        <a href="/" >
-            <img class="size-40 logo-navbar" src="/Aires del Rosario.png" alt="logo Aires del Rosario - instalaciones" />
+        <a href="/" data-soft-nav>
+          <img
+            class="logo-navbar w-28 sm:w-36 md:w-40"
+            src="/Aires del Rosario - White Logo.png"
+            alt="logo Aires del Rosario - instalaciones"
+          />
         </a>
       </div>
 
@@ -15,62 +24,232 @@
       <div class="md:hidden">
         <button
           id="menu-button"
-          class="text-gray-200 focus:outline-none"
+          class="relative w-10 h-10 flex flex-col justify-center items-center focus:outline-none"
           aria-label="Abrir menú"
+          type="button"
         >
-          <svg
-            class="h-6 w-6"
-            xmlns="http://www.w3.org/2000/svg"
-            fill="none"
-            viewBox="0 0 24 24"
-            stroke="currentColor"
-          >
-            <path
-              stroke-linecap="round"
-              stroke-linejoin="round"
-              stroke-width="2"
-              d="M4 6h16M4 12h16M4 18h16"
-            />
-          </svg>
+          <span
+            class="bar absolute left-2 top-3 w-6 h-0.5 bg-gray-200 transition-all duration-300"
+          ></span>
+          <span
+            class="bar absolute left-2 top-5 w-6 h-0.5 bg-gray-200 transition-all duration-300"
+          ></span>
+          <span
+            class="bar absolute left-2 top-7 w-6 h-0.5 bg-gray-200 transition-all duration-300"
+          ></span>
         </button>
       </div>
 
       <!-- Menú normal (escondido en móvil) -->
-      <div class="hidden md:flex space-x-6">
-        <a href="/" class="text-gray-100 hover:text-blue-600 text-2xl ">Inicio</a>
-        <a href={Astro.url.pathname === "/" ? "#servicios" : "/#servicios"} class="text-gray-100 hover:text-blue-600 text-2xl ">Servicios</a>
-        <a href="/nosotros" class="text-gray-100 hover:text-blue-600 text-2xl ">Nosotros</a>
-        <a href="/contacto" class="text-gray-100 hover:text-blue-600 text-2xl ">Contacto</a>
-        <a href="/faq" class="text-gray-100 hover:text-blue-600 text-2xl ">FAQ</a>
+      <div class="hidden md:flex space-x-2">
+        <a
+          href="/"
+          data-soft-nav
+          class={`px-3 py-2 text-base sm:text-lg md:text-xl lg:text-2xl rounded transition-colors duration-200 hover:text-[#378BA4] ${
+            Astro.url.pathname === '/'
+              ? 'text-[#378BA4] cursor-default pointer-events-none'
+              : 'text-gray-100'
+          }`}
+        >
+          Inicio
+        </a>
+        <a
+          href="/nosotros"
+          data-soft-nav
+          class={`px-3 py-2 text-base sm:text-lg md:text-xl lg:text-2xl rounded transition-colors duration-200 hover:text-[#378BA4] ${
+            Astro.url.pathname === '/nosotros'
+              ? 'text-[#378BA4] cursor-default pointer-events-none'
+              : 'text-gray-100'
+          }`}
+        >
+          Nosotros
+        </a>
+        <a
+          href="/faq"
+          data-soft-nav
+          class={`px-3 py-2 text-base sm:text-lg md:text-xl lg:text-2xl rounded transition-colors duration-200 hover:text-[#378BA4] ${
+            Astro.url.pathname === '/faq'
+              ? 'text-[#378BA4] cursor-default pointer-events-none'
+              : 'text-gray-100'
+          }`}
+        >
+          Preguntas freq.
+        </a>
       </div>
     </div>
+  </div>
 
-    <!-- Menú desplegable (móvil) -->
-    <div id="mobile-menu" class="md:hidden space-y-2 mt-4 flex justify-between">
-      <a href="/" class="text-gray-100 hover:text-blue-600">Inicio</a>
-      <a href={Astro.url.pathname === "/" ? "#servicios" : "/#servicios"} class="text-gray-100 hover:text-blue-600">Servicios</a>
-      <a href="/nosotros" class="text-gray-100 hover:text-blue-600">Nosotros</a>
-      <a href="/contacto" class="text-gray-100 hover:text-blue-600">Contacto</a>
-      <a href="/faq" class="text-gray-100 hover:text-blue-600 ">FAQ</a>
-    </div>
+  <!-- Menú desplegable (móvil) fuera del contenedor principal -->
+  <div
+    id="mobile-menu"
+    class="md:hidden flex flex-col gap-2 hidden fixed top-[88px] left-0 right-0 z-40 bg-[#124f90]/90 px-4 pb-6 rounded-b-xl shadow-lg"
+    style="backdrop-filter: blur(5px);"
+  >
+    <a
+      href="/"
+      data-soft-nav
+      aria-current={Astro.url.pathname === '/' ? 'page' : undefined}
+      class={`px-3 py-2 text-base sm:text-lg rounded transition-colors duration-200 hover:text-[#378BA4] ${
+        Astro.url.pathname === '/'
+          ? 'text-[#378BA4] cursor-default pointer-events-none'
+          : 'text-gray-100'
+      }`}
+    >
+      Inicio
+    </a>
+    <a
+      href="/nosotros"
+      data-soft-nav
+      aria-current={Astro.url.pathname === '/nosotros' ? 'page' : undefined}
+      class={`px-3 py-2 text-base sm:text-lg rounded transition-colors duration-200 hover:text-[#378BA4] ${
+        Astro.url.pathname === '/nosotros'
+          ? 'text-[#378BA4] cursor-default pointer-events-none'
+          : 'text-gray-100'
+      }`}
+    >
+      Nosotros
+    </a>
+    <a
+      href="/faq"
+      data-soft-nav
+      aria-current={Astro.url.pathname === '/faq' ? 'page' : undefined}
+      class={`px-3 py-2 text-base sm:text-lg rounded transition-colors duration-200 hover:text-[#378BA4] ${
+        Astro.url.pathname === '/faq'
+          ? 'text-[#378BA4] cursor-default pointer-events-none'
+          : 'text-gray-100'
+      }`}
+    >
+      FAQ
+    </a>
   </div>
 
   <!-- Script básico para toggle -->
   <script type="module">
-    const button = document.getElementById('menu-button');
-    const menu = document.getElementById('mobile-menu');
+    function softNavigate(url) {
+      fetch(url)
+        .then((res) => res.text())
+        .then((html) => {
+          // Extrae solo el contenido principal (ajusta el selector a tu layout)
+          const parser = new DOMParser();
+          const doc = parser.parseFromString(html, 'text/html');
+          const newContent = doc.querySelector('main') || doc.body;
+          document.querySelector('main').innerHTML = newContent.innerHTML;
 
-    button?.addEventListener('click', () => {
-      menu?.classList.toggle('hidden');
+          // Actualiza la URL en la barra de direcciones
+          window.history.pushState({}, '', url);
+
+          // Vuelve a inicializar scripts de la página (como el carrusel)
+          window.dispatchEvent(new Event('soft-navigate'));
+        });
+    }
+
+    // Navegación suave y cierre de menú móvil al navegar
+    document.addEventListener('click', (e) => {
+      const link = e.target.closest('a[data-soft-nav]');
+      if (!link) return;
+      if (link.classList.contains('pointer-events-none')) return;
+      e.preventDefault();
+      document.body.classList.add('fade-out');
+      setTimeout(() => {
+        softNavigate(link.getAttribute('href'));
+        document.body.classList.remove('fade-out');
+        // Cierra el menú móvil al navegar
+        const mobileMenu = document.getElementById('mobile-menu');
+        const menuBtn = document.getElementById('menu-button');
+        if (mobileMenu && !mobileMenu.classList.contains('hidden')) {
+          mobileMenu.classList.add('hidden');
+          menuBtn.classList.remove('open');
+        }
+      }, 300);
     });
+
+    // Maneja navegación con el botón atrás/adelante
+    window.addEventListener('popstate', () => {
+      softNavigate(location.pathname);
+    });
+
+    // Función para asignar el toggle del menú hamburguesa
+    function assignMenuToggle() {
+      const menuBtn = document.getElementById('menu-button');
+      const mobileMenu = document.getElementById('mobile-menu');
+      if (menuBtn && mobileMenu) {
+        menuBtn.onclick = () => {
+          mobileMenu.classList.toggle('hidden');
+          menuBtn.classList.toggle('open');
+        };
+      }
+    }
+
+    // Asigna el toggle al cargar
+    assignMenuToggle();
+
+    // Reasigna el toggle después de cada navegación SPA
+    window.addEventListener('soft-navigate', assignMenuToggle);
+
+    // Cambia el color del menú móvil al hacer scroll (opcional)
+    window.addEventListener('scroll', () => {
+      const mobileMenu = document.getElementById('mobile-menu');
+      if (!mobileMenu) return;
+      if (window.scrollY > 0) {
+        mobileMenu.classList.add('scrolled');
+      } else {
+        mobileMenu.classList.remove('scrolled');
+      }
+    });
+    // Para Cambiar el color del menú móvil al hacer scroll
+    //     window.addEventListener('scroll', () => {
+    //   const mobileMenu = document.getElementById('mobile-menu');
+    //   if (!mobileMenu) return;
+    //   if (window.scrollY > 0) {
+    //     mobileMenu.classList.add('scrolled');
+    //   } else {
+    //     mobileMenu.classList.remove('scrolled');
+    //   }
+    // });
   </script>
 </nav>
 
-
 <style>
   img.logo-navbar {
-  filter: drop-shadow(0 0 16px white );
-  width: 220px;
-}
-</style>
+    width: 160px;
+  }
 
+  body.fade-out {
+    opacity: 0;
+    transition: opacity 0.3s ease-out;
+  }
+
+  .header {
+    position: fixed;
+    backdrop-filter: blur(5px);
+    animation: adjust-header linear both;
+    animation-timeline: scroll();
+    animation-range: 0 100px;
+  }
+
+  @keyframes adjust-header {
+    to {
+      background: rgba(0, 0, 0, 0.3);
+      font-size: 12px;
+      height: 80px;
+      border-radius: 0;
+    }
+  }
+
+  /* Hamburguesa animada */
+  #menu-button .bar {
+    /* Nada extra aquí, solo para seleccionar todas */
+  }
+  #menu-button.open .bar:nth-child(1) {
+    transform: translateY(8px) rotate(45deg);
+  }
+  #menu-button.open .bar:nth-child(2) {
+    opacity: 0;
+  }
+  #menu-button.open .bar:nth-child(3) {
+    transform: translateY(-8px) rotate(-45deg);
+  }
+  /* #mobile-menu.scrolled {
+  background: rgba(0, 0, 0, 0.3) !important;
+} */
+</style>

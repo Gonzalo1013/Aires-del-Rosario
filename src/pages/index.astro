@@ -1,27 +1,19 @@
 ---
-import Layout from "../layouts/Layout.astro";
-import Navbar from "../components/Navbar.astro";
-import Hero from "../components/Hero.astro";
-import CalculadoraSection from "../components/CalculadoraSection.astro";
-import MarcasSlider from "../components/MarcasSlider.astro";
-import Footer from "../components/Footer.astro";
+import Layout from '../layouts/Layout.astro';
+import CalculadoraSection from '../components/CalculadoraSection.astro';
+import MarcasSlider from '../components/MarcasSlider.astro';
 
-
-import "../styles/global.css";
-import Servicebooks from "../components/Servicebooks.astro";
-
-
+import '../styles/global.css';
+import Services from '@/components/Services.astro';
+import Hero from '@/components/Hero.astro';
 ---
 
-
 <Layout
-  title="Aires del Rosario - Instalación y reparación de aire acondicionado"
+  title="Aires del Rosario"
   description="Servicio profesional de instalación, reparación y mantenimiento de aires acondicionados en Rosario. Calculá frigorías, contactanos y climatizá tu hogar."
 >
-  <Navbar/>
-  <Hero/>
-  <CalculadoraSection/>
-  <Servicebooks/>
-  <MarcasSlider/>
-  <Footer/>
+  <Hero />
+  <Services />
+  <CalculadoraSection />
+  <MarcasSlider />
 </Layout>
