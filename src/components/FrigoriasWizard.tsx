@@ -23,6 +23,25 @@ const initialFormData = {
   aislamiento: '',
 };
 
+// Campos que pertenecen a cada paso (en el mismo orden que `steps`)
+const fieldsPerStep: Array<Array<keyof typeof initialFormData>> = [
+  ['largo', 'ancho', 'alto'],
+  ['orientacion'],
+  ['tipo'],
+  ['personas'],
+  ['equipos'],
+  ['aislamiento'],
+];
+
+// Qué campos deben ser numéricos
+const numericFields = new Set<keyof typeof initialFormData>([
+  'largo',
+  'ancho',
+  'alto',
+  'personas',
+  'equipos',
+]);
+
 export default function FrigoriaWizard() {
   const [step, setStep] = useState(0);
   const [formData, setFormData] = useState(initialFormData);
@@ -30,30 +49,33 @@ export default function FrigoriaWizard() {
 
   const totalSteps = steps.length;
 
-  const isFormValid = () => {
-    const { largo, ancho, alto, personas, equipos } = formData;
-    return (
-      largo.trim() !== '' &&
-      ancho.trim() !== '' &&
-      alto.trim() !== '' &&
-      personas.trim() !== '' &&
-      equipos.trim() !== '' &&
-      !isNaN(Number(largo)) &&
-      !isNaN(Number(ancho)) &&
-      !isNaN(Number(alto)) &&
-      !isNaN(Number(personas)) &&
-      !isNaN(Number(equipos))
-    );
+  // ---- Validaciones ----
+  const isFieldValid = (field: keyof typeof initialFormData): boolean => {
+    const value = formData[field].trim();
+    if (value === '') return false; // requerido
+    if (numericFields.has(field)) {
+      const n = Number(value);
+      if (isNaN(n)) return false;
+      if (n <= 0) return false; // opcional: podés quitar este límite si querés permitir 0
+    }
+    return true;
   };
 
+  const isStepValid = (s: number): boolean => {
+    const fields = fieldsPerStep[s];
+    return fields.every(isFieldValid);
+  };
+
+  const isAllValid = (): boolean =>
+    fieldsPerStep.every((_, idx) => isStepValid(idx));
+
+  // ---- Navegación ----
   const handleNext = () => {
     if (step === totalSteps - 1) {
-      if (!isFormValid()) {
-        alert('Por favor, completa todos los campos correctamente.');
-        return;
-      }
+      if (!isAllValid()) return; // protección extra
       calcularFrigorias();
     } else {
+      if (!isStepValid(step)) return;
       setStep((prev) => prev + 1);
     }
   };
@@ -62,8 +84,8 @@ export default function FrigoriaWizard() {
     if (step > 0) setStep((prev) => prev - 1);
   };
 
-  const handleChange = (key: string, value: string) => {
-    setFormData({ ...formData, [key]: value });
+  const handleChange = (key: keyof typeof initialFormData, value: string) => {
+    setFormData((prev) => ({ ...prev, [key]: value }));
   };
 
   const calcularFrigorias = () => {
@@ -79,6 +101,7 @@ export default function FrigoriaWizard() {
     setResultado(resultadoTexto);
   };
 
+  // ---- Render de cada paso ----
   const renderStep = () => {
     switch (step) {
       case 0:
@@ -151,22 +174,39 @@ export default function FrigoriaWizard() {
     }
   };
 
+  const nextDisabled =
+    step === totalSteps - 1 ? !isAllValid() : !isStepValid(step);
+
   return (
     <div className="max-w-xl mx-auto p-4 space-y-6">
       <h2 className="text-2xl font-semibold text-center">
         Calculadora de Frigorías
       </h2>
+
       <Progress value={(step / (totalSteps - 1)) * 100} />
+
       <div className="text-lg font-medium text-gray-700">{steps[step]}</div>
+
       <div>{renderStep()}</div>
+
       <div className="flex justify-between mt-4">
-        <Button onClick={handleBack} disabled={step === 0} variant="outline">
+        <Button
+          onClick={handleBack}
+          disabled={step === 0}
+          variant="outline"
+          className="cursor-pointer"
+        >
           Atrás
         </Button>
-        <Button onClick={handleNext}>
+        <Button
+          onClick={handleNext}
+          disabled={nextDisabled}
+          className="cursor-pointer"
+        >
           {step === totalSteps - 1 ? 'Calcular' : 'Siguiente'}
         </Button>
       </div>
+
       {resultado && (
         <div className="mt-6 p-4 bg-blue-100 text-blue-800 rounded shadow">
           {resultado}
