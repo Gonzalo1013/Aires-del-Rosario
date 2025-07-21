@@ -82,45 +82,47 @@ export const prerender = false;
   <!-- Menú desplegable (móvil) fuera del contenedor principal -->
   <div
     id="mobile-menu"
-    class="md:hidden flex flex-col gap-2 hidden fixed top-[88px] left-0 right-0 z-40 bg-[#124f90]/90 px-4 pb-6 rounded-b-xl shadow-lg"
+    class="md:hidden hidden gap-2 fixed top-[88px] left-0 right-0 z-40 bg-[#124f90]/90 px-4 pb-6 rounded-b-xl shadow-lg"
     style="backdrop-filter: blur(5px);"
   >
-    <a
-      href="/"
-      data-soft-nav
-      aria-current={Astro.url.pathname === '/' ? 'page' : undefined}
-      class={`px-3 py-2 text-base sm:text-lg rounded transition-colors duration-200 hover:text-[#378BA4] ${
-        Astro.url.pathname === '/'
-          ? 'text-[#378BA4] cursor-default pointer-events-none'
-          : 'text-gray-100'
-      }`}
-    >
-      Inicio
-    </a>
-    <a
-      href="/nosotros"
-      data-soft-nav
-      aria-current={Astro.url.pathname === '/nosotros' ? 'page' : undefined}
-      class={`px-3 py-2 text-base sm:text-lg rounded transition-colors duration-200 hover:text-[#378BA4] ${
-        Astro.url.pathname === '/nosotros'
-          ? 'text-[#378BA4] cursor-default pointer-events-none'
-          : 'text-gray-100'
-      }`}
-    >
-      Nosotros
-    </a>
-    <a
-      href="/faq"
-      data-soft-nav
-      aria-current={Astro.url.pathname === '/faq' ? 'page' : undefined}
-      class={`px-3 py-2 text-base sm:text-lg rounded transition-colors duration-200 hover:text-[#378BA4] ${
-        Astro.url.pathname === '/faq'
-          ? 'text-[#378BA4] cursor-default pointer-events-none'
-          : 'text-gray-100'
-      }`}
-    >
-      FAQ
-    </a>
+    <div class="flex flex-col">
+      <a
+        href="/"
+        data-soft-nav
+        aria-current={Astro.url.pathname === '/' ? 'page' : undefined}
+        class={`px-3 py-2 text-base sm:text-lg rounded transition-colors duration-200 hover:text-[#378BA4] ${
+          Astro.url.pathname === '/'
+            ? 'text-[#378BA4] cursor-default pointer-events-none'
+            : 'text-gray-100'
+        }`}
+      >
+        Inicio
+      </a>
+      <a
+        href="/nosotros"
+        data-soft-nav
+        aria-current={Astro.url.pathname === '/nosotros' ? 'page' : undefined}
+        class={`px-3 py-2 text-base sm:text-lg rounded transition-colors duration-200 hover:text-[#378BA4] ${
+          Astro.url.pathname === '/nosotros'
+            ? 'text-[#378BA4] cursor-default pointer-events-none'
+            : 'text-gray-100'
+        }`}
+      >
+        Nosotros
+      </a>
+      <a
+        href="/faq"
+        data-soft-nav
+        aria-current={Astro.url.pathname === '/faq' ? 'page' : undefined}
+        class={`px-3 py-2 text-base sm:text-lg rounded transition-colors duration-200 hover:text-[#378BA4] ${
+          Astro.url.pathname === '/faq'
+            ? 'text-[#378BA4] cursor-default pointer-events-none'
+            : 'text-gray-100'
+        }`}
+      >
+        FAQ
+      </a>
+    </div>
   </div>
 
   <!-- Script básico para toggle -->
