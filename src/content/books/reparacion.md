@@ -1,7 +1,7 @@
 ---
-title: Reparacion
+title: Reparación
 subtitle: Reparación electrónica de placas inverter y convencionales
-img: reparacionaireacondicionado.jpg
+img: ../../assets/reparacion.jpg
 description: Reparación y diagnóstico de placas electrónicas inverter.
 order: 3
 ---

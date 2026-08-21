@@ -1,7 +1,7 @@
 ---
 title: Instalación
 subtitle: Instalación profesional de aires acondicionados
-img: instalacionaireacondicionado.jpg
+img: ../../assets/instalacion.jpg
 description: Colocación profesional de equipos split, multisplit e inverter.
 order: 2
 ---

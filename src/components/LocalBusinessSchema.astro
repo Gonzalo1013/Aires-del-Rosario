@@ -1,0 +1,54 @@
+---
+import { getCollection } from 'astro:content';
+import { AREA_SERVED, BUSINESS } from '../data/business';
+
+const servicios = (await getCollection('books')).sort(
+  (a, b) => (a.data.order ?? 99) - (b.data.order ?? 99)
+);
+
+const site = Astro.site!.origin;
+
+const schema = {
+  '@context': 'https://schema.org',
+  '@type': 'HVACBusiness',
+  '@id': `${site}/#business`,
+  name: BUSINESS.name,
+  description: BUSINESS.description,
+  url: site,
+  image: `${site}/og-aires-del-rosario.png`,
+  logo: `${site}/og-aires-del-rosario.png`,
+  email: BUSINESS.email,
+  telephone: BUSINESS.phone,
+  foundingDate: BUSINESS.foundingDate,
+  address: {
+    '@type': 'PostalAddress',
+    addressLocality: BUSINESS.city,
+    addressRegion: BUSINESS.region,
+    addressCountry: BUSINESS.country,
+  },
+  areaServed: AREA_SERVED,
+  sameAs: [BUSINESS.instagram],
+  knowsAbout: [
+    'Aire acondicionado split',
+    'Equipos inverter',
+    'Reparación de placas electrónicas',
+    'Carga de gas refrigerante',
+  ],
+  hasOfferCatalog: {
+    '@type': 'OfferCatalog',
+    name: 'Servicios de climatización en Rosario',
+    itemListElement: servicios.map(({ data }) => ({
+      '@type': 'Offer',
+      itemOffered: {
+        '@type': 'Service',
+        name: data.title,
+        description: data.description,
+        areaServed: { '@type': 'City', name: BUSINESS.city },
+        provider: { '@id': `${site}/#business` },
+      },
+    })),
+  },
+};
+---
+
+<script type="application/ld+json" set:html={JSON.stringify(schema)} is:inline />

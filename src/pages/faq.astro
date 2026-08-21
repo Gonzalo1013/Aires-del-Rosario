@@ -1,255 +1,74 @@
 ---
 import Layout from '../layouts/Layout.astro';
+import { FAQS } from '../data/faqs';
+
+// El texto del schema es el mismo que se renderiza abajo: requisito de Google
+// para que la página sea elegible como rich result.
+const faqSchema = {
+  '@context': 'https://schema.org',
+  '@type': 'FAQPage',
+  mainEntity: FAQS.map(({ question, answer, cta }) => ({
+    '@type': 'Question',
+    name: question,
+    acceptedAnswer: {
+      '@type': 'Answer',
+      // El CTA es parte del texto visible, así que también va al schema.
+      text: [
+        ...answer,
+        cta && `${cta.before} ${cta.linkText}${cta.after ?? ''}`,
+      ]
+        .filter(Boolean)
+        .join(' '),
+    },
+  })),
+};
 ---
 
 <Layout
-  title="Aires del Rosario | Preguntas Frecuentes"
-  description="Servicio profesional de instalación, reparación y mantenimiento de aires acondicionados en Rosario. Calculá frigorías, contactanos y climatizá tu hogar."
+  title="Preguntas frecuentes sobre aire acondicionado | Aires del Rosario"
+  description="Cuántas frigorías necesitás, cada cuánto hacer el mantenimiento, por qué gotea tu equipo o cuánto demora una instalación. Responden técnicos matriculados de Rosario."
 >
+  <script
+    type="application/ld+json"
+    set:html={JSON.stringify(faqSchema)}
+    is:inline
+    slot="head"
+  />
+
   <section
     class="max-w-sm sm:max-w-md md:max-w-3xl lg:max-w-6xl mx-auto pt-10 pb-12"
   >
     <h1
       class="text-2xl sm:text-3xl md:text-4xl font-bold mb-8 text-center text-gray-200"
     >
-      Preguntas Frecuentes
+      Preguntas frecuentes sobre aire acondicionado
     </h1>
-    <div class="acordeon">
-      <input
-        type="checkbox"
-        name="acordeon"
-        id="btn-acordeon1"
-        class="btn-acordeon"
-      />
-      <label for="btn-acordeon1">
-        ¿Cómo puedo calcular las frigorías necesarias para mi espacio?
-      </label>
-      <div class="contenido-acordeon">
-        <p>
-          Se suele tomar como referencia 100 frigorías por m².
-          <br />
-          <br />
-          Por ej.: un cuarto de 30m² necesita unas 3.000 frigorías. Si el espacio
-          tiene muchas ventanas, techos altos o exposición solar, es recomendable
-          aumentar a 120-130fg/m².
-          <br />
-          <br />
-          La fórmula más precisa es: largo x ancho x alto x 50 (frigorías/h), o bien
-          ajustar según condiciones específicas como orientación, aislamiento o carga
-          térmica.
-        </p>
-      </div>
-    </div>
-    <div class="acordeon">
-      <input
-        type="checkbox"
-        name="acordeon"
-        id="btn-acordeon2"
-        class="btn-acordeon"
-      />
-      <label for="btn-acordeon2">
-        ¿Qué tipo de mantenimiento necesita un aire acondicionado?
-      </label>
-      <div class="contenido-acordeon">
-        <p>
-          Recomendamos un servicio anual que incluya:
-          <br />
-          <br />
-          Limpieza de filtros y serpentines (evaporador y condensador);
-          <br />
-          <br />
-          Control de presión de refrigerante;
-          <br />
-          <br />
-          Revisión del drenaje;
-          <br />
-          <br />
-          Comprobación de componentes eléctricos (capacitores, termostatos);
-          <br />
-          <br />
-          En equipos inverter, verificación de sensores electrónicos.
-          <br />
-          <br />
-          Así prolongás vida útil, evitás averías y optimizás consumo energético.
-        </p>
-      </div>
-    </div>
-    <div class="acordeon">
-      <input
-        type="checkbox"
-        name="acordeon"
-        id="btn-acordeon3"
-        class="btn-acordeon"
-      />
-      <label for="btn-acordeon3"> ¿Ofrecen garantía en sus servicios? </label>
-      <div class="contenido-acordeon">
-        <p>
-          Claro, todos nuestros trabajos tienen garantía profesional.
-          <br />
-          Cumplimos con los requisitos del fabricante y la normativa vigente.
-          <br />
-          Además brindamos cobertura propia sobre mano de obra por un período determinado,
-          según el tipo de servicio.
-          <br />
-          <br />
-          Consultanos y te lo detallamos por escrito.
-        </p>
-      </div>
-    </div>
-    <div class="acordeon">
-      <input
-        type="checkbox"
-        name="acordeon"
-        id="btn-acordeon4"
-        class="btn-acordeon"
-      />
-      <label for="btn-acordeon4">
-        ¿Cuánto tiempo demora la instalación de un aire acondicionado?
-      </label>
-      <div class="contenido-acordeon">
-        <p>
-          Una instalación profesional suele durar entre 2 y 4 horas, dependiendo
-          de:
-          <br />
-          <br />
-          Tipo de equipo (split simple, multi-split, inverter);
-          <br />
-          <br />
-          Complejidad de la conexión (tablero, tubería, ubicación);
-          <br />
-          <br />
-          Acceso al espacio y condiciones estructurales.
-          <br />
-          <br />
-          Nuestros técnicos matriculados planifican previamente para garantizar eficiencia,
-          limpieza y cumplimiento de estándares.
-        </p>
-      </div>
-    </div>
-    <div class="acordeon">
-      <input
-        type="checkbox"
-        name="acordeon"
-        id="btn-acordeon5"
-        class="btn-acordeon"
-      />
-      <label for="btn-acordeon5">
-        ¿Qué marcas de aires acondicionados recomiendan?
-      </label>
-      <div class="contenido-acordeon">
-        <p>
-          Trabajamos e instalamos todas las marcas del mercado: Samsung, LG,
-          Midea, Surrey, Carrier, BGH, Hitachi, Sanyo, York, Tophouse, Noblex,
-          Philips, Gafa, Electra, entre otras.
-          <br />
-          La elección depende de tus necesidades —potencia, tipo de tecnología inverter,
-          presupuesto y disponibilidad de postventa—.
-          <br />
-          Te asesoramos para que elijas la mejor opción.
-        </p>
-      </div>
-    </div>
-    <div class="acordeon">
-      <input
-        type="checkbox"
-        name="acordeon"
-        id="btn-acordeon6"
-        class="btn-acordeon"
-      />
-      <label for="btn-acordeon6">
-        ¿Cómo puedo ahorrar en mis facturas de electricidad?
-      </label>
-      <div class="contenido-acordeon">
-        <p>
-          Usá una configuración razonable (22-24°C) y evitá temperaturas
-          demasiado bajas.
-          <br />
-          Programá termostatos o modos “eco”.
-          <br />
-          Mantené filtros limpios para mejorar la eficiencia.
-          <br />
-          Complementá con ventiladores y cerrá cortinas para reducir carga térmica.
-        </p>
-      </div>
-    </div>
-    <div class="acordeon">
-      <input
-        type="checkbox"
-        name="acordeon"
-        id="btn-acordeon7"
-        class="btn-acordeon"
-      />
-      <label for="btn-acordeon7">
-        ¿Con qué frecuencia debería limpiar el filtro del aire?
-      </label>
-      <div class="contenido-acordeon">
-        <p>
-          La vida útil depende del uso, mascotas y calidad del aire.
-          <br />
-          Como regla general:
-          <br />
-          <br />
-          Residencias sin mascotas: cada 2-3 meses.
-          <br />
-          <br />
-          Con mascotas o alergias: cada 1-2 meses.
-        </p>
-      </div>
-    </div>
-    <div class="acordeon">
-      <input
-        type="checkbox"
-        name="acordeon"
-        id="btn-acordeon8"
-        class="btn-acordeon"
-      />
-      <label for="btn-acordeon8">
-        ¿Por qué mi aire acondicionado gotea agua o no enfría bien?
-      </label>
-      <div class="contenido-acordeon">
-        <p>
-          Posibles causas:
-          <br />
-          <br />
-          Drenaje tapado o serpentines congelados;
-          <br />
-          <br />
-          Baja carga de gas (fuga), filtros sucios o fallas eléctricas.
-          <br />
-          <br />
-          Ante estas situaciones, es mejor llamar a un técnico matriculado, ya que
-          incluye diagnóstico correcto y solución profesional
-        </p>
-      </div>
-    </div>
-    <div class="acordeon">
-      <input
-        type="checkbox"
-        name="acordeon"
-        id="btn-acordeon9"
-        class="btn-acordeon"
-      />
-      <label for="btn-acordeon9">
-        ¿Cada cuánto debe revisarse el gas refrigerante?
-      </label>
-      <div class="contenido-acordeon">
-        <p>
-          Durante el mantenimiento anual verificamos niveles de gas y si hay
-          fugas.
-          <br />
-          Si existe una fuga, se debe reparar antes de recargar, para evitar daños
-          ambientales y pérdida de eficiencia
-        </p>
-      </div>
-    </div>
+
+    {
+      FAQS.map(({ question, answer, cta }, i) => (
+        <div class="acordeon">
+          <input type="checkbox" id={`btn-acordeon${i}`} class="btn-acordeon" />
+          <label for={`btn-acordeon${i}`}>{question}</label>
+          <div class="contenido-acordeon">
+            {answer.map((parrafo) => (
+              <p>{parrafo}</p>
+            ))}
+            {cta && (
+              /* set:html y no hijos JSX: Astro conserva los saltos de línea
+                 del template como texto, y eso mete un espacio adentro del
+                 <a> (subrayado de más) y otro antes del punto final. */
+              <p
+                set:html={`${cta.before} <a class="cta-enlace" href="${cta.href}">${cta.linkText}</a>${cta.after ?? ''}`}
+              />
+            )}
+          </div>
+        </div>
+      ))
+    }
   </section>
 </Layout>
 
 <style>
-  .acordeon {
-    background-color: white;
-  }
-
   .acordeon label {
     display: block;
     padding: 20px;
@@ -266,19 +85,57 @@ import Layout from '../layouts/Layout.astro';
   }
 
   .acordeon .contenido-acordeon {
-    padding: 0px;
-    margin: 0px 20px;
-    max-height: 0px;
+    background-color: #fff;
+    padding: 0 20px;
+    max-height: 0;
     overflow: hidden;
     transition: all 300ms ease;
   }
 
-  .btn-acordeon:checked ~ .contenido-acordeon {
-    max-height: 600px;
-    padding: 15px 0px;
+  .contenido-acordeon p + p {
+    margin-top: 0.75rem;
   }
 
+  /* :global porque el enlace entra por set:html y no lleva el atributo
+     data-astro-cid que Astro le agrega al markup del template; sin esto la
+     regla scoped no lo alcanza. Va anidado para no filtrarse fuera del FAQ.
+     El acordeón abierto tiene fondo blanco: el azul de marca es el único
+     color de la paleta con contraste suficiente sobre ese fondo. */
+  .contenido-acordeon :global(.cta-enlace) {
+    color: var(--color-brand);
+    font-weight: 600;
+    text-decoration: underline;
+    text-underline-offset: 2px;
+  }
+
+  .contenido-acordeon :global(.cta-enlace:hover),
+  .contenido-acordeon :global(.cta-enlace:focus-visible) {
+    color: var(--color-brand-accent);
+  }
+
+  .btn-acordeon:checked ~ .contenido-acordeon {
+    max-height: 600px;
+    padding: 15px 20px;
+  }
+
+  /* Oculto pero enfocable: display:none lo sacaría del orden de tabulación
+     y el acordeón quedaría inaccesible por teclado. */
   .btn-acordeon {
-    display: none;
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    opacity: 0;
+  }
+
+  .btn-acordeon:focus-visible ~ label {
+    outline: 2px solid var(--color-brand-accent);
+    outline-offset: -2px;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .acordeon label,
+    .acordeon .contenido-acordeon {
+      transition: none;
+    }
   }
 </style>

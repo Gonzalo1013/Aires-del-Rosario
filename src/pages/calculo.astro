@@ -1,11 +1,11 @@
 ---
-import FrigoriaWizard from '../components/FrigoriasWizard';
+import FrigoriasWizard from '../components/FrigoriasWizard.astro';
 import Layout from '../layouts/Layout.astro';
 ---
 
 <Layout
-  title="Aires del Rosario | Calculadora de frigorías"
-  description="Servicio profesional de instalación, reparación y mantenimiento de aires acondicionados en Rosario. Calculá frigorías, contactanos y climatizá tu hogar."
+  title="Calculadora de frigorías online | Aires del Rosario"
+  description="Calculá gratis cuántas frigorías necesita tu ambiente según sus metros, la cantidad de personas y los equipos electrónicos. Guía paso a paso hecha por técnicos de Rosario."
 >
   <section
     class="bg-blue-50 max-w-sm sm:max-w-md md:max-w-3xl lg:max-w-6xl mx-auto mt-10 mb-12 p-10 rounded-2xl md:mb-48 lg:mb-12"
@@ -13,6 +13,6 @@ import Layout from '../layouts/Layout.astro';
     <h1 class="text-3xl font-bold mb-6 text-center">
       Calculá cuántas frigorías necesitás
     </h1>
-    <FrigoriaWizard client:load />
+    <FrigoriasWizard />
   </section>
 </Layout>

@@ -1,5 +1,10 @@
 ---
-
+import { Image } from 'astro:assets';
+import logo from '../assets/logo-white-footer.png';
+import mailIcon from '../assets/mail-icon.png';
+import instagramIcon from '../assets/instagram-icon.png';
+import whatsappIcon from '../assets/whatsapp-icon.png';
+import { BUSINESS } from '../data/business';
 ---
 
 <footer class="bg-gray-900 text-gray-400 py-6 px-6 md:px-12 lg:px-20">
@@ -8,61 +13,75 @@
   >
     <div>
       <div class="border-b border-gray-700 w-sm flex justify-center mb-4">
-        <img
+        <Image
           class="w-40 pb-4"
-          src="/Aires del Rosario - White Logo2.png"
-          alt="logo Aires del Rosario - instalaciones"
+          src={logo}
+          alt="Aires del Rosario"
+          width={320}
+          height={137}
+          loading="lazy"
         />
       </div>
 
       <ul class="space-y-2 text-sm w-full">
         <li>
           <a
-            href="mailto:airesderosario.service@gmail.com"
+            href={`mailto:${BUSINESS.email}`}
             class="flex items-center gap-2 hover:text-red-400 transition justify-center"
           >
-            <span>
-              <img
-                src="/mail-icon.png"
-                alt="email"
-                class="w-5 h-5 rounded-full inline-block"
-              />
-            </span> airesderosario.service@gmail.com
+            <Image
+              src={mailIcon}
+              alt=""
+              width={20}
+              height={20}
+              loading="lazy"
+              class="w-5 h-5 rounded-full inline-block"
+            />
+            {BUSINESS.email}
           </a>
         </li>
         <li>
           <a
-            href="https://www.instagram.com/aires.delrosario"
+            href={BUSINESS.instagram}
             target="_blank"
             rel="noopener"
             class="flex items-center gap-2 hover:text-pink-400 transition justify-center"
           >
-            <span>
-              <img
-                src="/instagram-icon.png"
-                alt="instagram"
-                class="w-5 h-5 rounded-full inline-block"
-              />
-            </span> @aires.delrosario
+            <Image
+              src={instagramIcon}
+              alt=""
+              width={20}
+              height={20}
+              loading="lazy"
+              class="w-5 h-5 rounded-full inline-block"
+            />
+            {BUSINESS.instagramHandle}
           </a>
         </li>
         <li>
           <a
-            href="https://wa.me/5493412297176"
+            href={`https://wa.me/${BUSINESS.whatsapp}`}
             target="_blank"
             rel="noopener"
             class="flex items-center gap-2 hover:text-green-400 transition justify-center"
           >
-            <span>
-              <img
-                src="/whatsapp-icon.png"
-                alt="whatsApp"
-                class="w-5 h-5 rounded-full inline-block"
-              />
-            </span> WhatsApp
+            <Image
+              src={whatsappIcon}
+              alt=""
+              width={20}
+              height={20}
+              loading="lazy"
+              class="w-5 h-5 rounded-full inline-block"
+            />
+            WhatsApp 341 229-7176
           </a>
         </li>
       </ul>
+
+      <!-- NAP visible: debe coincidir con el JSON-LD de LocalBusiness -->
+      <p class="mt-4 text-center text-sm">
+        Service de aire acondicionado en {BUSINESS.city}, {BUSINESS.region}
+      </p>
     </div>
   </div>
 
@@ -70,12 +89,6 @@
   <div
     class="mt-4 border-t border-gray-700 pt-6 text-center text-xs text-gray-500"
   >
-    © {new Date().getFullYear()} AiresdelRosairo. Todos los derechos reservados.
+    © {new Date().getFullYear()} Aires del Rosario. Todos los derechos reservados.
   </div>
 </footer>
-
-<style>
-  h3.logo-footer:hover {
-    filter: drop-shadow(0 0 8px white);
-  }
-</style>

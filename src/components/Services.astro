@@ -1,32 +1,57 @@
 ---
 import { getCollection } from 'astro:content';
+import { getImage } from 'astro:assets';
 
-let services = await getCollection('books');
+const services = (await getCollection('books')).sort(
+  (a, b) => (a.data.order ?? 99) - (b.data.order ?? 99)
+);
 
-services = services.sort((a, b) => (a.data.order ?? 99) - (b.data.order ?? 99));
+// Son fondos CSS, así que no puede usarse <Image />: getImage() da la misma
+// optimización (WebP + resize) devolviendo sólo la URL final.
+const items = await Promise.all(
+  services.map(async ({ slug, data }) => ({
+    slug,
+    ...data,
+    // 1152px es el ancho real del slot principal en escritorio. Los masters ya
+    // vienen a esa medida con máscara de enfoque aplicada, así que acá no se
+    // reescala. q82 es el punto elegido midiendo: por debajo la compresión se
+    // come el enfoque, por encima el peso sube sin ganancia visible.
+    // Las 4 fotos son fondos CSS y no se pueden diferir, así que el peso pega
+    // de lleno en la ruta crítica del home.
+    bg: data.img
+      ? (
+          await getImage({
+            src: data.img,
+            format: 'webp',
+            width: Math.min(1152, data.img.width),
+            quality: 82,
+          })
+        ).src
+      : undefined,
+  }))
+);
 ---
 
 <div
-  class="relative w-full max-w-sm sm:max-w-md md:max-w-3xl lg:max-w-6xl mx-auto bg-gray-100 rounded-xl px-4 sm:px-0"
+  id="servicios"
+  class="relative w-full max-w-sm sm:max-w-md md:max-w-3xl lg:max-w-6xl mx-auto bg-gray-100 rounded-xl px-4 sm:px-0 scroll-mt-navbar"
 >
   <div class="slide h-[500px]">
     {
-      services.map((servicio) => {
-        const { slug, data } = servicio;
-        const { title, description, img } = data;
-
-        return (
-          <div class="item" style={`background-image: url(/${img})`}>
-            <div class="content">
-              <div class="name">{title}</div>
-              <div class="des">{description}</div>
-              <button>
-                <a href={`/libro/${slug}`}>Ver más</a>
-              </button>
-            </div>
+      items.map(({ slug, title, description, bg, imgPosition }) => (
+        <div
+          class="item"
+          style={`background-image: url(${bg}); background-position: ${imgPosition ?? 'center'}`}
+        >
+          <div class="content">
+            <div class="name">{title}</div>
+            <div class="des">{description}</div>
+            <a class="cta" href={`/libro/${slug}`}>
+              Ver más sobre {title.toLowerCase()}
+            </a>
           </div>
-        );
-      })
+        </div>
+      ))
     }
   </div>
 
@@ -35,24 +60,24 @@ services = services.sort((a, b) => (a.data.order ?? 99) - (b.data.order ?? 99));
     <button class="next"><i class="fa-solid fa-arrow-right"></i></button>
   </div>
 
-  <script is:inline>
+  <script>
     function initCarousel() {
-      let next = document.querySelector('.next');
-      let prev = document.querySelector('.prev');
+      const slide = document.querySelector('.slide');
+      if (!slide) return;
 
-      next?.addEventListener('click', function () {
-        let items = document.querySelectorAll('.item');
-        document.querySelector('.slide')?.appendChild(items[0]);
+      document.querySelector('.next')?.addEventListener('click', () => {
+        const items = document.querySelectorAll('.item');
+        slide.appendChild(items[0]);
       });
 
-      prev?.addEventListener('click', function () {
-        let items = document.querySelectorAll('.item');
-        document.querySelector('.slide')?.prepend(items[items.length - 1]);
+      document.querySelector('.prev')?.addEventListener('click', () => {
+        const items = document.querySelectorAll('.item');
+        slide.prepend(items[items.length - 1]);
       });
     }
 
-    document.addEventListener('DOMContentLoaded', initCarousel);
-    window.addEventListener('soft-navigate', initCarousel);
+    // astro:page-load se dispara en la carga inicial y tras cada view transition
+    document.addEventListener('astro:page-load', initCarousel);
   </script>
 
   <style>
@@ -83,8 +108,35 @@ services = services.sort((a, b) => (a.data.order ?? 99) - (b.data.order ?? 99));
       left: calc(50% + 220px);
     }
 
-    .slide .item:nth-child(n + 4) {
+    .slide .item:nth-child(4) {
       left: calc(50% + 440px);
+    }
+
+    /* Sólo existen dos ranuras chicas (+220 y +440): una tercera a +660
+       desbordaría el viewport a 1280px. De la 5ª tarjeta en adelante se
+       ocultan y esperan turno. Antes caían TODAS en la ranura de +440,
+       apiladas, y la última pintaba encima de la 4ª: al avanzar, la que
+       estaba debajo parecía desaparecer en vez de subir un lugar. */
+    .slide .item:nth-child(n + 5) {
+      display: none;
+    }
+
+    /* Velo degradado sólo sobre la tarjeta activa: las fotos tienen paredes
+       claras y el texto blanco quedaba ilegible. Va en un ::after para no
+       tocar el background-image, que se setea inline con la URL optimizada. */
+    .slide .item:nth-child(2)::after {
+      content: '';
+      position: absolute;
+      inset: 0;
+      z-index: 1;
+      border-radius: inherit;
+      pointer-events: none;
+      background: linear-gradient(
+        to top,
+        color-mix(in srgb, var(--color-brand-dark) 88%, transparent) 0%,
+        color-mix(in srgb, var(--color-brand-dark) 55%, transparent) 30%,
+        transparent 62%
+      );
     }
 
     .item .content {
@@ -97,6 +149,8 @@ services = services.sort((a, b) => (a.data.order ?? 99) - (b.data.order ?? 99));
       transform: translate(0, -50%);
       font-family: system-ui;
       display: none;
+      /* por encima del velo */
+      z-index: 2;
     }
 
     .slide .item:nth-child(2) .content {
@@ -116,20 +170,19 @@ services = services.sort((a, b) => (a.data.order ?? 99) - (b.data.order ?? 99));
       animation: animate 1s ease-in-out 0.3s 1 forwards;
     }
 
-    .content button {
+    .content .cta {
+      display: inline-block;
       margin-top: 12px;
       padding: 6px 20px;
-      border: none;
-      cursor: pointer;
       opacity: 0;
       animation: animate 1s ease-in-out 0.6s 1 forwards;
-      background-color: #124f90ca;
+      background-color: var(--color-brand-translucent);
       color: #fff;
       border-radius: 5px;
     }
 
-    .content button:hover {
-      background-color: #378ba4;
+    .content .cta:hover {
+      background-color: var(--color-brand-accent);
     }
 
     @keyframes animate {
@@ -169,12 +222,16 @@ services = services.sort((a, b) => (a.data.order ?? 99) - (b.data.order ?? 99));
       color: #fff;
     }
 
-    @media (max-width: 1290px) {
+    /* Mismo breakpoint que el overflow-x de global.css: por debajo de 1280px
+       los ítems 3 y 4 caen fuera del viewport. Se usa display:none y no
+       visibility:hidden porque un absoluto invisible igual sigue generando
+       área desplazable, que era justamente el desborde a tapar. */
+    @media (max-width: 1279.98px) {
       .slide .item {
-        visibility: hidden;
+        display: none;
       }
       .slide .item:nth-child(2) {
-        visibility: visible;
+        display: block;
       }
 
       .content .name {
