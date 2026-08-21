@@ -1,9 +1,33 @@
 ---
-export const prerender = false;
+import { Image } from 'astro:assets';
+import logo from '../assets/logo-white.png';
+
+/**
+ * Único origen de los enlaces del menú: el de escritorio y el desplegable de
+ * móvil se generan de acá. Antes cada enlace estaba escrito dos veces con su
+ * plantilla de clases repetida, y las etiquetas ya se habían desincronizado
+ * (escritorio decía "Preguntas freq." y móvil "FAQ").
+ */
+const LINKS = [
+  { href: '/', label: 'Inicio' },
+  { href: '/galeria', label: 'Galería' },
+  { href: '/nosotros', label: 'Nosotros' },
+  { href: '/faq', label: 'Preguntas freq.' },
+];
+
+const actual = Astro.url.pathname;
+
+/** La página actual no se enlaza a sí misma: se marca y se desactiva. */
+const clases = (href: string, tamanos: string) =>
+  `px-3 py-2 ${tamanos} rounded transition-colors duration-200 hover:text-brand-accent ${
+    actual === href
+      ? 'text-brand-accent cursor-default pointer-events-none'
+      : 'text-gray-100'
+  }`;
 ---
 
 <nav
-  class="header bg-[#124f90ca] fixed top-4 left-4 right-4 z-50 rounded-xl shadow-md"
+  class="header bg-brand-translucent fixed top-4 left-4 right-4 z-50 rounded-xl shadow-md"
 >
   <div
     class="max-w-sm sm:max-w-md md:max-w-3xl lg:max-w-6xl mx-auto px-4 lg:px-0"
@@ -11,11 +35,15 @@ export const prerender = false;
     <div class="flex justify-between h-20 items-center">
       <!-- Logo -->
       <div class="flex-shrink-0">
-        <a href="/" data-soft-nav>
-          <img
+        <a href="/">
+          <Image
             class="logo-navbar w-28 sm:w-36 md:w-40"
-            src="/Aires del Rosario - White Logo.png"
-            alt="logo Aires del Rosario - instalaciones"
+            src={logo}
+            alt="Aires del Rosario - instalación y reparación de aire acondicionado"
+            width={160}
+            height={160}
+            loading="eager"
+            fetchpriority="high"
           />
         </a>
       </div>
@@ -42,183 +70,71 @@ export const prerender = false;
 
       <!-- Menú normal (escondido en móvil) -->
       <div class="hidden md:flex space-x-2">
-        <a
-          href="/"
-          data-soft-nav
-          class={`px-3 py-2 text-base sm:text-lg md:text-xl lg:text-2xl rounded transition-colors duration-200 hover:text-[#378BA4] ${
-            Astro.url.pathname === '/'
-              ? 'text-[#378BA4] cursor-default pointer-events-none'
-              : 'text-gray-100'
-          }`}
-        >
-          Inicio
-        </a>
-        <a
-          href="/nosotros"
-          data-soft-nav
-          class={`px-3 py-2 text-base sm:text-lg md:text-xl lg:text-2xl rounded transition-colors duration-200 hover:text-[#378BA4] ${
-            Astro.url.pathname === '/nosotros'
-              ? 'text-[#378BA4] cursor-default pointer-events-none'
-              : 'text-gray-100'
-          }`}
-        >
-          Nosotros
-        </a>
-        <a
-          href="/faq"
-          data-soft-nav
-          class={`px-3 py-2 text-base sm:text-lg md:text-xl lg:text-2xl rounded transition-colors duration-200 hover:text-[#378BA4] ${
-            Astro.url.pathname === '/faq'
-              ? 'text-[#378BA4] cursor-default pointer-events-none'
-              : 'text-gray-100'
-          }`}
-        >
-          Preguntas freq.
-        </a>
+        {
+          LINKS.map(({ href, label }) => (
+            <a
+              href={href}
+              aria-current={actual === href ? 'page' : undefined}
+              class={clases(
+                href,
+                'text-base sm:text-lg md:text-xl lg:text-2xl whitespace-nowrap'
+              )}
+            >
+              {label}
+            </a>
+          ))
+        }
       </div>
     </div>
   </div>
 
-  <!-- Menú desplegable (móvil) fuera del contenedor principal -->
+  <!-- Menú desplegable (móvil).
+       Ojo: el backdrop-filter de .header convierte al <nav> en bloque
+       contenedor de sus descendientes `fixed`, así que este `top` es relativo
+       al nav y NO al viewport. 100% = borde inferior del nav; +0.5rem es la
+       separación visible. -->
   <div
     id="mobile-menu"
-    class="md:hidden hidden gap-2 fixed top-[88px] left-0 right-0 z-40 bg-[#124f90]/90 px-4 pb-6 rounded-b-xl shadow-lg"
+    class="md:hidden hidden gap-2 fixed top-[calc(100%+0.5rem)] left-0 right-0 z-40 bg-brand/90 px-4 pb-6 rounded-b-xl shadow-lg"
     style="backdrop-filter: blur(5px);"
   >
     <div class="flex flex-col">
-      <a
-        href="/"
-        data-soft-nav
-        aria-current={Astro.url.pathname === '/' ? 'page' : undefined}
-        class={`px-3 py-2 text-base sm:text-lg rounded transition-colors duration-200 hover:text-[#378BA4] ${
-          Astro.url.pathname === '/'
-            ? 'text-[#378BA4] cursor-default pointer-events-none'
-            : 'text-gray-100'
-        }`}
-      >
-        Inicio
-      </a>
-      <a
-        href="/nosotros"
-        data-soft-nav
-        aria-current={Astro.url.pathname === '/nosotros' ? 'page' : undefined}
-        class={`px-3 py-2 text-base sm:text-lg rounded transition-colors duration-200 hover:text-[#378BA4] ${
-          Astro.url.pathname === '/nosotros'
-            ? 'text-[#378BA4] cursor-default pointer-events-none'
-            : 'text-gray-100'
-        }`}
-      >
-        Nosotros
-      </a>
-      <a
-        href="/faq"
-        data-soft-nav
-        aria-current={Astro.url.pathname === '/faq' ? 'page' : undefined}
-        class={`px-3 py-2 text-base sm:text-lg rounded transition-colors duration-200 hover:text-[#378BA4] ${
-          Astro.url.pathname === '/faq'
-            ? 'text-[#378BA4] cursor-default pointer-events-none'
-            : 'text-gray-100'
-        }`}
-      >
-        FAQ
-      </a>
+      {
+        LINKS.map(({ href, label }) => (
+          <a
+            href={href}
+            aria-current={actual === href ? 'page' : undefined}
+            class={clases(href, 'text-base sm:text-lg')}
+          >
+            {label}
+          </a>
+        ))
+      }
     </div>
   </div>
 
-  <!-- Script básico para toggle -->
-  <script type="module">
-    function softNavigate(url) {
-      fetch(url)
-        .then((res) => res.text())
-        .then((html) => {
-          // Extrae solo el contenido principal (ajusta el selector a tu layout)
-          const parser = new DOMParser();
-          const doc = parser.parseFromString(html, 'text/html');
-          const newContent = doc.querySelector('main') || doc.body;
-          document.querySelector('main').innerHTML = newContent.innerHTML;
-
-          // Actualiza la URL en la barra de direcciones
-          window.history.pushState({}, '', url);
-
-          // Vuelve a inicializar scripts de la página (como el carrusel)
-          window.dispatchEvent(new Event('soft-navigate'));
-        });
-    }
-
-    // Navegación suave y cierre de menú móvil al navegar
-    document.addEventListener('click', (e) => {
-      const link = e.target.closest('a[data-soft-nav]');
-      if (!link) return;
-      if (link.classList.contains('pointer-events-none')) return;
-      e.preventDefault();
-      document.body.classList.add('fade-out');
-      setTimeout(() => {
-        softNavigate(link.getAttribute('href'));
-        document.body.classList.remove('fade-out');
-        // Cierra el menú móvil al navegar
-        const mobileMenu = document.getElementById('mobile-menu');
-        const menuBtn = document.getElementById('menu-button');
-        if (mobileMenu && !mobileMenu.classList.contains('hidden')) {
-          mobileMenu.classList.add('hidden');
-          menuBtn.classList.remove('open');
-        }
-      }, 300);
-    });
-
-    // Maneja navegación con el botón atrás/adelante
-    window.addEventListener('popstate', () => {
-      softNavigate(location.pathname);
-    });
-
-    // Función para asignar el toggle del menú hamburguesa
-    function assignMenuToggle() {
+  <!-- Toggle del menú hamburguesa. La navegación la maneja <ClientRouter /> -->
+  <script>
+    function setupMenuToggle() {
       const menuBtn = document.getElementById('menu-button');
       const mobileMenu = document.getElementById('mobile-menu');
-      if (menuBtn && mobileMenu) {
-        menuBtn.onclick = () => {
-          mobileMenu.classList.toggle('hidden');
-          menuBtn.classList.toggle('open');
-        };
-      }
+      if (!menuBtn || !mobileMenu) return;
+
+      menuBtn.addEventListener('click', () => {
+        const isOpen = menuBtn.classList.toggle('open');
+        mobileMenu.classList.toggle('hidden', !isOpen);
+        menuBtn.setAttribute('aria-expanded', String(isOpen));
+      });
     }
 
-    // Asigna el toggle al cargar
-    assignMenuToggle();
-
-    // Reasigna el toggle después de cada navegación SPA
-    window.addEventListener('soft-navigate', assignMenuToggle);
-
-    // Cambia el color del menú móvil al hacer scroll (opcional)
-    window.addEventListener('scroll', () => {
-      const mobileMenu = document.getElementById('mobile-menu');
-      if (!mobileMenu) return;
-      if (window.scrollY > 0) {
-        mobileMenu.classList.add('scrolled');
-      } else {
-        mobileMenu.classList.remove('scrolled');
-      }
-    });
-    // Para Cambiar el color del menú móvil al hacer scroll
-    //     window.addEventListener('scroll', () => {
-    //   const mobileMenu = document.getElementById('mobile-menu');
-    //   if (!mobileMenu) return;
-    //   if (window.scrollY > 0) {
-    //     mobileMenu.classList.add('scrolled');
-    //   } else {
-    //     mobileMenu.classList.remove('scrolled');
-    //   }
-    // });
+    // astro:page-load se dispara en la carga inicial y tras cada view transition
+    document.addEventListener('astro:page-load', setupMenuToggle);
   </script>
 </nav>
 
 <style>
   img.logo-navbar {
     width: 160px;
-  }
-
-  body.fade-out {
-    opacity: 0;
-    transition: opacity 0.3s ease-out;
   }
 
   .header {
@@ -239,9 +155,6 @@ export const prerender = false;
   }
 
   /* Hamburguesa animada */
-  #menu-button .bar {
-    /* Nada extra aquí, solo para seleccionar todas */
-  }
   #menu-button.open .bar:nth-child(1) {
     transform: translateY(8px) rotate(45deg);
   }
@@ -251,7 +164,4 @@ export const prerender = false;
   #menu-button.open .bar:nth-child(3) {
     transform: translateY(-8px) rotate(-45deg);
   }
-  /* #mobile-menu.scrolled {
-  background: rgba(0, 0, 0, 0.3) !important;
-} */
 </style>

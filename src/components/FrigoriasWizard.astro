@@ -1,0 +1,536 @@
+---
+/**
+ * Calculadora de frigorías, sin frameworks.
+ *
+ * Fórmula (la base es la que el propio sitio publica en /faq):
+ *   base      = largo × ancho × alto × 50 fg/m³
+ *   + carga   = personas × 100 + equipos × 200
+ *   × factores de orientación, tipo de ambiente y aislamiento
+ *
+ * Los factores viajan en data-factor de cada <option>, así que el frontmatter
+ * es la única fuente de verdad: el script no los reimplementa.
+ *
+ * OJO: son reglas de oro conservadoras, no un cálculo de carga térmica
+ * normalizado. Conviene que un técnico matriculado valide los coeficientes.
+ */
+
+import { BUSINESS } from '../data/business';
+
+const FG_POR_M3 = 50;
+const FG_POR_PERSONA = 100;
+const FG_POR_EQUIPO = 200;
+
+// Hemisferio sur: la orientación norte es la que más sol recibe.
+const ORIENTACIONES = [
+  { value: 'sur', label: 'Sur (poco sol directo)', factor: 1 },
+  { value: 'este', label: 'Este (sol de mañana)', factor: 1.05 },
+  { value: 'oeste', label: 'Oeste (sol de tarde)', factor: 1.1 },
+  { value: 'norte', label: 'Norte (sol la mayor parte del día)', factor: 1.1 },
+];
+
+const TIPOS = [
+  { value: 'dormitorio', label: 'Dormitorio', factor: 1 },
+  { value: 'living', label: 'Living / comedor', factor: 1.05 },
+  { value: 'oficina', label: 'Oficina o local', factor: 1.1 },
+  { value: 'cocina', label: 'Cocina', factor: 1.2 },
+];
+
+const AISLAMIENTOS = [
+  { value: 'buena', label: 'Buena: DVH o ventanas chicas', factor: 1 },
+  { value: 'estandar', label: 'Estándar: vidrio simple', factor: 1.1 },
+  { value: 'vidriada', label: 'Mucha superficie vidriada', factor: 1.2 },
+];
+
+const PASOS = [
+  'Dimensiones del ambiente',
+  'Orientación',
+  'Tipo de ambiente',
+  'Cantidad de personas',
+  'Equipos electrónicos',
+  'Aislamiento y ventanas',
+];
+
+const selectClass =
+  'w-full rounded-md border border-gray-300 bg-white px-3 py-2 text-base text-gray-900 focus:border-brand-accent focus:outline-none focus:ring-2 focus:ring-brand-accent/40';
+const inputClass = selectClass;
+---
+
+<form
+  id="wizard"
+  class="max-w-xl mx-auto p-4 space-y-6"
+  novalidate
+  data-fg-m3={FG_POR_M3}
+  data-fg-persona={FG_POR_PERSONA}
+  data-fg-equipo={FG_POR_EQUIPO}
+  data-whatsapp={BUSINESS.whatsapp}
+>
+  <h2 class="text-2xl font-semibold text-center text-gray-900">
+    Calculadora de frigorías
+  </h2>
+
+  <div
+    class="h-2 w-full overflow-hidden rounded-full bg-gray-300"
+    role="progressbar"
+    aria-label="Progreso del cálculo"
+    aria-valuemin="0"
+    aria-valuemax={PASOS.length}
+    aria-valuenow="1"
+    id="wizard-progress"
+  >
+    <div
+      class="h-full bg-brand transition-[width] duration-300 motion-reduce:transition-none"
+      style="width: 0%"
+      data-bar
+    >
+    </div>
+  </div>
+
+  <p class="text-sm text-gray-600" data-step-counter>
+    Paso 1 de {PASOS.length}
+  </p>
+
+  {
+    PASOS.map((titulo, i) => (
+      <fieldset class="wizard-paso space-y-3" data-paso={i} hidden={i !== 0}>
+        <legend class="text-lg font-medium text-gray-800 mb-2">{titulo}</legend>
+
+        {i === 0 && (
+          <div class="space-y-2">
+            <label class="block">
+              <span class="sr-only">Largo en metros</span>
+              <input
+                class={inputClass}
+                type="number"
+                name="largo"
+                min="0.5"
+                max="50"
+                step="0.1"
+                placeholder="Largo en metros"
+                required
+              />
+            </label>
+            <label class="block">
+              <span class="sr-only">Ancho en metros</span>
+              <input
+                class={inputClass}
+                type="number"
+                name="ancho"
+                min="0.5"
+                max="50"
+                step="0.1"
+                placeholder="Ancho en metros"
+                required
+              />
+            </label>
+            <label class="block">
+              <span class="sr-only">Alto en metros</span>
+              <input
+                class={inputClass}
+                type="number"
+                name="alto"
+                min="1.8"
+                max="10"
+                step="0.1"
+                placeholder="Alto en metros"
+                required
+              />
+            </label>
+          </div>
+        )}
+
+        {i === 1 && (
+          <select class={selectClass} name="orientacion" required>
+            <option value="">Elegí una orientación…</option>
+            {ORIENTACIONES.map((o) => (
+              <option value={o.value} data-factor={o.factor}>
+                {o.label}
+              </option>
+            ))}
+          </select>
+        )}
+
+        {i === 2 && (
+          <select class={selectClass} name="tipo" required>
+            <option value="">Elegí el tipo de ambiente…</option>
+            {TIPOS.map((o) => (
+              <option value={o.value} data-factor={o.factor}>
+                {o.label}
+              </option>
+            ))}
+          </select>
+        )}
+
+        {i === 3 && (
+          <label class="block">
+            <span class="sr-only">Cantidad de personas</span>
+            <input
+              class={inputClass}
+              type="number"
+              name="personas"
+              min="0"
+              max="50"
+              step="1"
+              placeholder="Cantidad de personas que suelen estar"
+              required
+            />
+          </label>
+        )}
+
+        {i === 4 && (
+          <label class="block">
+            <span class="sr-only">Cantidad de equipos electrónicos</span>
+            <input
+              class={inputClass}
+              type="number"
+              name="equipos"
+              min="0"
+              max="50"
+              step="1"
+              placeholder="Equipos electrónicos (TV, PC, heladera…)"
+              required
+            />
+          </label>
+        )}
+
+        {i === 5 && (
+          <select class={selectClass} name="aislamiento" required>
+            <option value="">Elegí el nivel de aislamiento…</option>
+            {AISLAMIENTOS.map((o) => (
+              <option value={o.value} data-factor={o.factor}>
+                {o.label}
+              </option>
+            ))}
+          </select>
+        )}
+      </fieldset>
+    ))
+  }
+
+  <p class="text-sm text-red-700 min-h-5" data-error role="alert"></p>
+
+  <div class="flex justify-between">
+    <button
+      type="button"
+      data-back
+      class="rounded-md border border-gray-400 px-4 py-2 text-gray-800 hover:bg-gray-100 disabled:opacity-40 disabled:cursor-not-allowed cursor-pointer"
+      disabled
+    >
+      Atrás
+    </button>
+    <button
+      type="submit"
+      data-next
+      class="rounded-md bg-brand px-4 py-2 text-white hover:bg-brand-accent transition-colors cursor-pointer"
+    >
+      Siguiente
+    </button>
+  </div>
+
+</form>
+
+<!-- Se abre con showModal(): el <dialog> nativo ya aporta el foco atrapado,
+     el cierre con Escape y el ::backdrop. -->
+<dialog
+  id="resultado-modal"
+  role="dialog"
+  aria-modal="true"
+  aria-labelledby="resultado-titulo"
+>
+  <div class="modal-caja">
+    <p class="text-sm font-medium tracking-wide text-brand-accent uppercase">
+      Resultado del cálculo
+    </p>
+
+    <h3 id="resultado-titulo" class="mt-2 text-3xl font-bold text-white">
+      Necesitás unas <span data-total>—</span> frigorías
+    </h3>
+
+    <p class="mt-4 rounded-lg bg-brand/35 px-4 py-3 text-lg text-white">
+      Equipo recomendado: <strong data-sugerido>—</strong>
+      <span class="block text-sm text-slate-300" data-nota hidden>
+        Por el tamaño del ambiente puede convenir más de un equipo.
+      </span>
+    </p>
+
+    <p class="mt-3 text-sm text-slate-400" data-desglose></p>
+
+    <div class="mt-6 flex flex-col gap-2 sm:flex-row-reverse">
+      <a
+        data-whatsapp-cta
+        href="#"
+        target="_blank"
+        rel="noopener noreferrer"
+        class="flex-1 rounded-md bg-green-500 px-4 py-3 text-center font-semibold text-white transition-colors hover:bg-green-600"
+      >
+        Pedir presupuesto por WhatsApp
+      </a>
+      <button
+        type="button"
+        data-cerrar
+        class="cursor-pointer rounded-md border border-slate-500 px-4 py-3 text-slate-200 transition-colors hover:bg-white/10 sm:shrink-0"
+      >
+        Volver a calcular
+      </button>
+    </div>
+
+    <p class="mt-4 text-xs text-slate-400">
+      Es una estimación orientativa. Un técnico matriculado te confirma el
+      equipo justo para tu ambiente.
+    </p>
+  </div>
+</dialog>
+
+<style>
+  /* El <dialog> queda transparente y sin padding para que cualquier clic que
+     lo tenga como target sea, necesariamente, un clic en el backdrop. */
+  #resultado-modal {
+    margin: auto;
+    width: min(30rem, calc(100vw - 2rem));
+    max-height: calc(100dvh - 2rem);
+    overflow: visible;
+    border: none;
+    padding: 0;
+    background: transparent;
+  }
+
+  #resultado-modal::backdrop {
+    background: rgb(4 8 22 / 0.72);
+    backdrop-filter: blur(4px);
+  }
+
+  .modal-caja {
+    max-height: calc(100dvh - 2rem);
+    overflow-y: auto;
+    border: 1px solid var(--color-brand);
+    border-radius: 1rem;
+    /* Opaco a propósito: va sobre un backdrop translúcido y el texto blanco
+       necesita contraste garantizado. */
+    background: var(--color-brand-dark);
+    padding: 1.75rem;
+    box-shadow: 0 25px 50px -12px rgb(0 0 0 / 0.6);
+  }
+
+  #resultado-modal[open] {
+    animation: modal-entra 0.2s ease-out;
+  }
+
+  @keyframes modal-entra {
+    from {
+      opacity: 0;
+      transform: translateY(8px) scale(0.98);
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    #resultado-modal[open] {
+      animation: none;
+    }
+  }
+</style>
+
+<script>
+  /** Medidas comerciales habituales en Argentina, en frigorías. */
+  const EQUIPOS_COMERCIALES = [2250, 3000, 4500, 5500, 6500, 9000, 12000];
+
+  /** Los campos del wizard son todos <input> o <select>. */
+  type Campo = HTMLInputElement | HTMLSelectElement;
+
+  function initWizard() {
+    // Este handler corre en cada astro:page-load, también en las páginas que no
+    // tienen el wizard: si no está el marcado, se sale sin hacer nada.
+    const formEl = document.getElementById('wizard');
+    const modalEl = document.getElementById('resultado-modal');
+    if (!(formEl instanceof HTMLFormElement)) return;
+    if (!(modalEl instanceof HTMLDialogElement)) return;
+
+    // Re-declarados con tipo explícito a propósito: el narrowing del
+    // `instanceof` no cruza a las funciones de más abajo, y sin esto TS los ve
+    // como HTMLElement | null dentro de cada closure.
+    const form: HTMLFormElement = formEl;
+    const modal: HTMLDialogElement = modalEl;
+
+    // Los coeficientes se declaran una sola vez, en el frontmatter
+    const FG_POR_M3 = Number(form.dataset.fgM3);
+    const FG_POR_PERSONA = Number(form.dataset.fgPersona);
+    const FG_POR_EQUIPO = Number(form.dataset.fgEquipo);
+
+    // El marcado vive en este mismo componente, así que si falta alguno de
+    // estos nodos es un error de programación, no un caso de runtime.
+    const pasos = Array.from(
+      form.querySelectorAll<HTMLFieldSetElement>('.wizard-paso')
+    );
+    const bar = form.querySelector<HTMLElement>('[data-bar]')!;
+    const progress = document.getElementById('wizard-progress')!;
+    const counter = form.querySelector<HTMLElement>('[data-step-counter]')!;
+    const errorBox = form.querySelector<HTMLElement>('[data-error]')!;
+    const btnBack = form.querySelector<HTMLButtonElement>('[data-back]')!;
+    const btnNext = form.querySelector<HTMLButtonElement>('[data-next]')!;
+
+    const elTotal = modal.querySelector<HTMLElement>('[data-total]')!;
+    const elSugerido = modal.querySelector<HTMLElement>('[data-sugerido]')!;
+    const elNota = modal.querySelector<HTMLElement>('[data-nota]')!;
+    const elDesglose = modal.querySelector<HTMLElement>('[data-desglose]')!;
+    const ctaWhatsapp =
+      modal.querySelector<HTMLAnchorElement>('[data-whatsapp-cta]')!;
+    const btnCerrar = modal.querySelector<HTMLButtonElement>('[data-cerrar]')!;
+
+    let actual = 0;
+
+    const campos = (i: number): Campo[] =>
+      Array.from(pasos[i].querySelectorAll<Campo>('input, select'));
+
+    /** Devuelve el mensaje de error del paso, o null si es válido. */
+    function validarPaso(i: number): string | null {
+      for (const campo of campos(i)) {
+        const valor = campo.value.trim();
+        if (valor === '') {
+          return campo.tagName === 'SELECT'
+            ? 'Elegí una opción para continuar.'
+            : 'Completá todos los campos para continuar.';
+        }
+        if (campo instanceof HTMLInputElement && campo.type === 'number') {
+          const n = Number(valor);
+          if (!Number.isFinite(n)) return 'Ingresá un número válido.';
+          const min = Number(campo.min);
+          const max = Number(campo.max);
+          if (n < min || n > max) {
+            return `Ingresá un valor entre ${min} y ${max}.`;
+          }
+        }
+      }
+      return null;
+    }
+
+    /** Campo del formulario por atributo name. */
+    function campoPorNombre(nombre: string): Campo {
+      return form.elements.namedItem(nombre) as Campo;
+    }
+
+    function factorDe(nombre: string): number {
+      const select = campoPorNombre(nombre) as HTMLSelectElement;
+      return Number(select.selectedOptions[0]?.dataset.factor ?? 1);
+    }
+
+    function numero(nombre: string): number {
+      return Number(campoPorNombre(nombre).value);
+    }
+
+    // enfocar=false en el primer render: robar el foco al cargar la página
+    // haría saltar el scroll hasta el formulario.
+    function render(enfocar = true) {
+      pasos.forEach((p, i) => (p.hidden = i !== actual));
+      const pct = (actual / (pasos.length - 1)) * 100;
+      bar.style.width = `${pct}%`;
+      progress.setAttribute('aria-valuenow', String(actual + 1));
+      counter.textContent = `Paso ${actual + 1} de ${pasos.length}`;
+      btnBack.disabled = actual === 0;
+      btnNext.textContent = actual === pasos.length - 1 ? 'Calcular' : 'Siguiente';
+      errorBox.textContent = '';
+      if (enfocar) campos(actual)[0]?.focus();
+    }
+
+    function calcular() {
+      const volumen = numero('largo') * numero('ancho') * numero('alto');
+      const base = volumen * FG_POR_M3;
+      const porPersonas = numero('personas') * FG_POR_PERSONA;
+      const porEquipos = numero('equipos') * FG_POR_EQUIPO;
+
+      const factor =
+        factorDe('orientacion') * factorDe('tipo') * factorDe('aislamiento');
+
+      const total = Math.round((base + porPersonas + porEquipos) * factor);
+      const sugerido =
+        EQUIPOS_COMERCIALES.find((fg) => fg >= total) ??
+        EQUIPOS_COMERCIALES[EQUIPOS_COMERCIALES.length - 1];
+
+      const fmt = new Intl.NumberFormat('es-AR');
+      const superaElMayor =
+        total > EQUIPOS_COMERCIALES[EQUIPOS_COMERCIALES.length - 1];
+
+      elTotal.textContent = fmt.format(total);
+      elSugerido.textContent = `${fmt.format(sugerido)} frigorías`;
+      elNota.hidden = !superaElMayor;
+      elDesglose.textContent =
+        `Ambiente de ${fmt.format(Math.round(volumen * 10) / 10)} m³ · ` +
+        `${fmt.format(Math.round(base))} fg de base · ` +
+        `+${fmt.format(porPersonas + porEquipos)} fg por personas y equipos · ` +
+        `ajuste ×${factor.toFixed(2)}`;
+
+      const mensaje =
+        `¡Hola! Usé la calculadora de la web y me da que necesito unas ` +
+        `${fmt.format(total)} frigorías (equipo sugerido: ${fmt.format(sugerido)} fg). ` +
+        `Quería pedir un presupuesto.`;
+      ctaWhatsapp.href = `https://wa.me/${form.dataset.whatsapp}?text=${encodeURIComponent(mensaje)}`;
+
+      modal.showModal();
+    }
+
+    /**
+     * Vuelve el wizard al paso 1 con los campos vacíos.
+     * Idempotente a propósito: en las vías explícitas se llama de inmediato y
+     * otra vez desde el evento `close`, y ejecutarla dos veces da lo mismo.
+     */
+    function reiniciar() {
+      form.reset();
+      actual = 0;
+      render(true);
+    }
+
+    function cerrarYReiniciar() {
+      if (modal.open) modal.close();
+      reiniciar();
+    }
+
+    // El <dialog> nativo ya cierra con Escape y eso llega vía `close`.
+    modal.addEventListener('close', reiniciar);
+
+    // Handler explícito de Escape: redundante con el comportamiento nativo,
+    // pero hace la vía verificable y no cuesta nada porque cerrarYReiniciar
+    // es idempotente y sale temprano si el modal ya está cerrado.
+    modal.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape') cerrarYReiniciar();
+    });
+
+    // Botón y backdrop no se cuelgan de `close`: reinician directo, para que el
+    // wizard no quede sucio si ese evento no llega.
+    btnCerrar.addEventListener('click', cerrarYReiniciar);
+
+    // Un clic en el ::backdrop tiene al propio <dialog> como target; el
+    // contenido está dentro de .modal-caja, así que nunca da falsos positivos.
+    modal.addEventListener('click', (e) => {
+      if (e.target === modal) cerrarYReiniciar();
+    });
+
+    form.addEventListener('submit', (e) => {
+      e.preventDefault();
+      const error = validarPaso(actual);
+      if (error) {
+        errorBox.textContent = error;
+        campos(actual)[0]?.focus();
+        return;
+      }
+      if (actual === pasos.length - 1) {
+        calcular();
+      } else {
+        actual++;
+        render();
+      }
+    });
+
+    btnBack.addEventListener('click', () => {
+      if (actual > 0) {
+        actual--;
+        render();
+      }
+    });
+
+    // Limpiar el error apenas el usuario corrige
+    form.addEventListener('input', () => {
+      errorBox.textContent = '';
+    });
+
+    render(false);
+  }
+
+  document.addEventListener('astro:page-load', initWizard);
+</script>

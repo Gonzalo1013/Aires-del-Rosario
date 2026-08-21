@@ -1,7 +1,7 @@
 ---
 title: Carga de Gas
 subtitle: Carga de gas refrigerante con precisión técnica
-img: recargagasaireacondicionado.jpg
+img: ../../assets/carga-de-gas.jpg
 description: Revisión del circuito frigorífico y recarga de refrigerante.
 order: 4
 

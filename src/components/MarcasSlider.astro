@@ -1,25 +1,40 @@
 ---
-// src/components/MarcasSlider.astro
+import { Image } from 'astro:assets';
+
+import samsung from '../assets/samsung-icon.png';
+import bgh from '../assets/bgh-icon.jpg';
+import lg from '../assets/lg-icon.png';
+import hitachi from '../assets/hitachi-icon.png';
+import surrey from '../assets/surrey-icon.png';
+import york from '../assets/york-icon.png';
+import toshiba from '../assets/toshiba-icon.png';
+import whirlpool from '../assets/whirlpool-icon.png';
+import daikin from '../assets/daikin-icon.png';
+import carrier from '../assets/carrier-icon.png';
+import midea from '../assets/midea-icon.png';
+import tophouse from '../assets/tophouse-icon.png';
+import philco from '../assets/philco-icon.png';
+import electrolux from '../assets/electrolux-icon.png';
+import fujitsu from '../assets/fujitsu-icon.png';
+import sanyo from '../assets/sanyo-icon.png';
+
 const marcas = [
-  {
-    name: 'samsung',
-    src: '/samsung-icon.png',
-  },
-  { name: 'BGH', src: '/bgh-icon.jpg' },
-  { name: 'LG', src: '/lg-icon.png' },
-  { name: 'hitachi', src: '/hitachi-icon.png' },
-  { name: 'surrey', src: '/surrey-icon.png' },
-  { name: 'york', src: '/york-icon.png' },
-  { name: 'toshiba', src: '/toshiba-icon.png' },
-  { name: 'whirlpool', src: '/whirlpool-icon.png' },
-  { name: 'daikin', src: '/daikin-icon.png' },
-  { name: 'carrier', src: '/carrier-icon.png' },
-  { name: 'midea', src: '/midea-icon.png' },
-  { name: 'tophouse', src: '/tophouse-icon.png' },
-  { name: 'philco', src: '/philco-icon.png' },
-  { name: 'electrolux', src: '/electrolux-icon.png' },
-  { name: 'fujitsu', src: '/fujitsu-icon.png' },
-  { name: 'sanyo', src: '/sanyo-icon.png' },
+  { name: 'Samsung', src: samsung },
+  { name: 'BGH', src: bgh },
+  { name: 'LG', src: lg },
+  { name: 'Hitachi', src: hitachi },
+  { name: 'Surrey', src: surrey },
+  { name: 'York', src: york },
+  { name: 'Toshiba', src: toshiba },
+  { name: 'Whirlpool', src: whirlpool },
+  { name: 'Daikin', src: daikin },
+  { name: 'Carrier', src: carrier },
+  { name: 'Midea', src: midea },
+  { name: 'Tophouse', src: tophouse },
+  { name: 'Philco', src: philco },
+  { name: 'Electrolux', src: electrolux },
+  { name: 'Fujitsu', src: fujitsu },
+  { name: 'Sanyo', src: sanyo },
 ];
 ---
 
@@ -35,19 +50,38 @@ const marcas = [
   <div class="overflow-hidden">
     <div
       id="marcas-slider"
-      class="flex animate-slide gap-8 whitespace-nowrap"
+      class="flex animate-slide gap-8 whitespace-nowrap motion-reduce:animate-none"
       style="width: max-content"
     >
       {
-        marcas.concat(marcas).map((marca) => (
-          <div
-            class="text-lg font-medium text-gray-600 shrink-0"
-            style="md:min-width: 120px"
-          >
-            <img
+        /* El array se duplica para que el loop sea continuo. La segunda mitad
+           es puramente decorativa: aria-hidden evita que los lectores de
+           pantalla lean 32 marcas en vez de 16. */
+        marcas.map((marca) => (
+          <div class="shrink-0 md:min-w-[120px]">
+            <Image
               src={marca.src}
-              alt={marca.name}
-              class="size-20 sm:size-32 bg-white mx-auto mb-2 rounded-full p-1 shadow-md"
+              alt={`Aire acondicionado ${marca.name}`}
+              width={128}
+              height={128}
+              loading="lazy"
+              decoding="async"
+              class="size-20 sm:size-32 bg-white mx-auto mb-2 rounded-full p-1 shadow-md object-contain"
+            />
+          </div>
+        ))
+      }
+      {
+        marcas.map((marca) => (
+          <div class="shrink-0 md:min-w-[120px]" aria-hidden="true">
+            <Image
+              src={marca.src}
+              alt=""
+              width={128}
+              height={128}
+              loading="lazy"
+              decoding="async"
+              class="size-20 sm:size-32 bg-white mx-auto mb-2 rounded-full p-1 shadow-md object-contain"
             />
           </div>
         ))

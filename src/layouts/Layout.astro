@@ -4,46 +4,64 @@ import WhatsappButton from '../components/WhatsappButton.astro';
 import '../styles/global.css';
 import Navbar from '../components/Navbar.astro';
 import Footer from '../components/Footer.astro';
+import LocalBusinessSchema from '../components/LocalBusinessSchema.astro';
+
+interface Props {
+  title?: string;
+  description?: string;
+  /** Ruta de la imagen para compartir en redes. Se resuelve a URL absoluta. */
+  image?: string;
+}
 
 const {
-  title = 'Aires del Rosario - Instalación y reparación de aire acondicionado en Rosario',
-  description = 'Servicio profesional de instalación, reparación y mantenimiento de aires acondicionados en Rosario. Calculá frigorías, contactanos y climatizá tu hogar.',
+  title = 'Aires del Rosario | Instalación y reparación de aire acondicionado en Rosario',
+  description = 'Servicio profesional de instalación, reparación y mantenimiento de aires acondicionados en Rosario, Santa Fe. Técnicos matriculados. Calculá frigorías y contactanos por WhatsApp.',
+  image = '/og-aires-del-rosario.png',
 } = Astro.props;
+
+const canonicalURL = new URL(Astro.url.pathname, Astro.site);
+// og:image debe ser absoluta: WhatsApp, Facebook y X descartan las relativas.
+const ogImageURL = new URL(image, Astro.site);
 ---
 
 <!doctype html>
-<html lang="en">
+<html lang="es">
   <head>
-    <meta name="google-site-verification" content="76NmJ7XTId2bP0741tQllSD2l3eSvqyWlrDqZCCpGsE" />
+    <!-- charset y viewport primero: deben entrar en el primer KB del documento -->
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+
     <title>{title}</title>
     <meta name="description" content={description} />
-    <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <!-- SEO: Palabras clave -->
+    <link rel="canonical" href={canonicalURL} />
+    <meta name="generator" content={Astro.generator} />
     <meta
-      name="keywords"
-      content="aire acondicionado, Rosario, reparación, instalación, mantenimiento, climatización, frigorías, split, service, técnico, hogar, empresa"
+      name="google-site-verification"
+      content="76NmJ7XTId2bP0741tQllSD2l3eSvqyWlrDqZCCpGsE"
     />
-    <!-- SEO: Open Graph para compartir en redes -->
+
+    <!-- Open Graph -->
+    <meta property="og:type" content="website" />
+    <meta property="og:site_name" content="Aires del Rosario" />
+    <meta property="og:locale" content="es_AR" />
     <meta property="og:title" content={title} />
     <meta property="og:description" content={description} />
-    <meta property="og:image" content="/Aires del Rosario.png" />
-    <meta property="og:type" content="website" />
-    <meta property="og:url" content="https://tusitio.com" />
-    <!-- SEO: Twitter Card -->
+    <meta property="og:url" content={canonicalURL} />
+    <meta property="og:image" content={ogImageURL} />
+    <meta property="og:image:alt" content={title} />
+
+    <!-- Twitter Card -->
     <meta name="twitter:card" content="summary_large_image" />
     <meta name="twitter:title" content={title} />
     <meta name="twitter:description" content={description} />
-    <meta name="twitter:image" content="/Aires del Rosario.png" />
-    <!-- ...otros head... -->
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width" />
-    <link
-      class="rounded-full"
-      rel="icon"
-      type="image/svg+xml"
-      href="/Aires del Rosario - Icon.png"
-    />
-    <!-- Font Titillium Web -->
+    <meta name="twitter:image" content={ogImageURL} />
+
+    <link rel="icon" type="image/png" href="/favicon.png" />
+    <link rel="apple-touch-icon" href="/favicon.png" />
+
+    <!-- Fuentes -->
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link
       href="https://fonts.googleapis.com/css2?family=Titillium+Web:wght@400;600;700&display=swap"
       rel="stylesheet"
@@ -56,17 +74,43 @@ const {
       crossorigin="anonymous"
       referrerpolicy="no-referrer"
     />
-    <meta name="generator" content={Astro.generator} />
+
+    <!-- Marca que hay JS disponible, y lo hace ANTES del primer pintado (por eso
+         va inline y en el head). Sirve para que un efecto de aparición pueda
+         esconder su contenido desde el CSS sin riesgo: sin JS la clase no está,
+         el contenido se ve, y no hay parpadeo de "aparece, desaparece, vuelve".
+         Lo usa GaleriaGrid.astro. -->
+    <script is:inline>
+      document.documentElement.classList.add('js');
+    </script>
+
+    <LocalBusinessSchema />
+    <slot name="head" />
     <ClientRouter />
   </head>
 
-  <body class="pt-20">
+  <body class="pt-navbar">
     <Navbar />
     <main>
       <slot />
     </main>
     <WhatsappButton />
     <Footer />
+
+    <script>
+      // Salto al ancla cuando se llega con hash (p. ej. /#servicios desde el
+      // botón "Volver" de /libro/*). No se delega en el comportamiento nativo
+      // del navegador porque con `scroll-behavior: smooth` la animación puede
+      // no completarse, y encima el ClientRouter no siempre la re-dispara.
+      // 'instant' además es preferible al aterrizar desde otra página.
+      function irAlAncla() {
+        if (!location.hash) return;
+        const destino = document.querySelector(location.hash);
+        destino?.scrollIntoView({ behavior: 'instant', block: 'start' });
+      }
+
+      document.addEventListener('astro:page-load', irAlAncla);
+    </script>
   </body>
 </html>
 
@@ -76,7 +120,7 @@ const {
     margin: 0;
     width: auto;
     height: auto;
-    background-color: #0a112ecb;
+    background-color: var(--color-page);
     font-family: 'Titillium Web', sans-serif;
   }
 </style>

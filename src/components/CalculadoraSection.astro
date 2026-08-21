@@ -1,12 +1,18 @@
 ---
+import { getImage } from 'astro:assets';
+import calcBg from '../assets/calc-frigorias.jpg';
 
+const bg = await getImage({ src: calcBg, format: 'webp', width: 1200 });
 ---
 
 <section
   class="max-w-sm sm:max-w-md md:max-w-3xl lg:max-w-6xl mx-auto py-10 lg:my-16"
 >
   <!-- Card de calculadora -->
-  <div class="calc rounded-lg p-4 flex flex-col justify-center">
+  <div
+    class="calc rounded-lg p-4 flex flex-col justify-center"
+    style={`background-image: url(${bg.src})`}
+  >
     <h3 class="text-xl pt-48 font-semibold">
       Calcula cuántas frigorías necesitas para tu ambiente
     </h3>
@@ -14,17 +20,21 @@
       Descubrí qué aire acondicionado es el ideal para vos con nuestra guía paso
       a paso.
     </p>
-    <button
-      class="self-start bg-[#124f90ca] text-white mt-4 py-1.5 px-5 rounded hover:bg-[#378ba4] transition cursor-pointer"
+    <a
+      href="/calculo"
+      class="self-start bg-brand-translucent text-white mt-4 py-1.5 px-5 rounded hover:bg-brand-accent transition"
     >
-      <a href="/calculo">Calcular</a>
-    </button>
+      Calcular
+    </a>
   </div>
 </section>
 
 <style>
   .calc {
-    background-image: url(/calc-frigorias.png);
     background-size: cover;
+    /* Anclado arriba a propósito: la foto es 3:2 y esta caja es mucho más
+       apaisada, así que `cover` escala por ancho y recorta en altura. Con
+       `center` el split queda fuera de cuadro. */
+    background-position: top;
   }
 </style>

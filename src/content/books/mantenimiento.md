@@ -1,7 +1,7 @@
 ---
 title: Mantenimiento
 subtitle: Mantenimiento preventivo y correctivo de aire acondicionado
-img: mantenimientoaireacondicionado.jpg
+img: ../../assets/mantenimiento.jpg
 description: Limpieza profunda de unidades internas y externas.
 order: 1
 ---

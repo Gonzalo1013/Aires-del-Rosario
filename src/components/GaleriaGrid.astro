@@ -1,0 +1,386 @@
+---
+import { Image } from 'astro:assets';
+import type { ImageMetadata } from 'astro';
+import { ALT_GALERIA } from '../data/galeria';
+
+/**
+ * Mosaico de fotos de trabajos. Auto-descubre todo lo que haya en
+ * src/assets/galeria/: agregar una foto es pegar el archivo, sin tocar código.
+ * El orden es alfabético por nombre de archivo (con orden numérico natural),
+ * así que numerarlos —01-, 02-, …— es lo que define la secuencia.
+ */
+const modulos = import.meta.glob<{ default: ImageMetadata }>(
+  '../assets/galeria/*.{jpg,JPG,jpeg,JPEG,png,PNG,webp,avif}',
+  { eager: true }
+);
+
+/**
+ * El alt sale de `src/data/galeria.ts` si la foto está listada ahí. Si no, se
+ * deriva del nombre del archivo: se le quita la extensión y el prefijo numérico
+ * de orden, y los guiones pasan a espacios. La derivación es la red de
+ * seguridad para que una foto recién pegada no quede sin alt; el texto bueno
+ * (con tildes y bien redactado) va en el mapa.
+ */
+function altDesde(archivo: string): string {
+  const definido = ALT_GALERIA[archivo];
+  if (definido) return definido;
+
+  const texto = archivo
+    .replace(/\.[^.]+$/, '')
+    .replace(/^\d+[-_\s]*/, '')
+    .replace(/[-_]+/g, ' ')
+    .trim();
+
+  if (!texto) {
+    return 'Trabajo de aire acondicionado realizado por Aires del Rosario en Rosario';
+  }
+
+  return texto.charAt(0).toUpperCase() + texto.slice(1);
+}
+
+interface Foto {
+  img: ImageMetadata;
+  alt: string;
+  /** ancho / alto real de la foto */
+  ar: number;
+}
+
+const fotos: Foto[] = Object.entries(modulos)
+  .sort(([a], [b]) => a.localeCompare(b, 'es', { numeric: true }))
+  .map(([ruta, modulo]) => ({
+    img: modulo.default,
+    alt: altDesde(ruta.split('/').pop() ?? ''),
+    ar: modulo.default.width / modulo.default.height,
+  }));
+
+/**
+ * Armado de las filas ("justified layout", el mismo criterio que usan Flickr o
+ * Google Fotos, pero resuelto en el build porque acá se conocen las medidas
+ * reales de cada foto).
+ *
+ * Cada fila se llena hasta alcanzar un objetivo de "unidades de proporción"
+ * (la suma de los ancho/alto de sus fotos). Después, el ancho de cada foto se
+ * reparte en proporción a SU propio ancho/alto, así que:
+ *   - la fila termina justo en el borde, sin huecos;
+ *   - todas las fotos de una fila comparten alto, pero **cada fila tiene un
+ *     alto distinto**: una fila de 3 fotos queda alta y grande, una de 6 queda
+ *     baja y chica. De ahí que ninguna foto tenga el mismo tamaño que la de al
+ *     lado;
+ *   - no hace falta recortar nada: cada foto conserva su proporción exacta.
+ *
+ * El ciclo de objetivos es lo que gobierna el ritmo visual. Con verticales de
+ * celular (0.5625) da filas de 3, 5, 4 y 6 fotos.
+ */
+const OBJETIVOS = [1.9, 2.9, 2.3, 3.3, 2.1, 2.7];
+
+const filas: Foto[][] = [];
+let enCurso: Foto[] = [];
+let acumulado = 0;
+
+for (const foto of fotos) {
+  const objetivo = OBJETIVOS[filas.length % OBJETIVOS.length];
+
+  // Se cierra la fila con la suma que quede MÁS CERCA del objetivo, tanto por
+  // debajo como por encima. Cortar recién al pasarlo hacía que una foto
+  // horizontal (1.78, lo que ocupan tres verticales) desbordara una fila de
+  // objetivo bajo y dejara todas sus vecinas de 136px de ancho.
+  const cerrarAntes =
+    enCurso.length > 0 &&
+    Math.abs(acumulado + foto.ar - objetivo) > Math.abs(acumulado - objetivo);
+
+  if (cerrarAntes) {
+    filas.push(enCurso);
+    enCurso = [];
+    acumulado = 0;
+  }
+
+  enCurso.push(foto);
+  acumulado += foto.ar;
+}
+if (enCurso.length > 0) filas.push(enCurso);
+
+// Una última fila con una o dos fotos sueltas queda huérfana y se lee como
+// error. En ese caso se junta con la fila anterior y el total se reparte en dos
+// filas parejas. Volcarlas todas en la fila anterior sin repartir era peor:
+// siete fotos en una fila quedaban de 158px de ancho.
+if (filas.length > 1) {
+  const ultima = filas[filas.length - 1];
+  const objetivoUltima = OBJETIVOS[(filas.length - 1) % OBJETIVOS.length];
+  const sumaUltima = ultima.reduce((total, f) => total + f.ar, 0);
+
+  if (sumaUltima < objetivoUltima * 0.6) {
+    const juntas = [...filas[filas.length - 2], ...ultima];
+    const corte = Math.ceil(juntas.length / 2);
+    filas.splice(
+      filas.length - 2,
+      2,
+      juntas.slice(0, corte),
+      juntas.slice(corte)
+    );
+  }
+}
+
+/**
+ * Ancho de cada foto como fracción del espacio disponible de su fila.
+ *
+ * El denominador es la suma de proporciones de la fila, que es justo lo que
+ * hace que la fila termine exacta en el borde.
+ *
+ * La excepción es una última fila demasiado flaca: estirar dos verticales a
+ * todo el ancho las deja de 570px de ancho y más de mil de alto, el doble que
+ * cualquier otra. Por debajo de tres verticales (1.6) esa fila se calcula con
+ * el objetivo, conserva el alto que le correspondía y deja el sobrante libre.
+ * De tres en adelante se estira como cualquier otra: da el mismo tamaño que
+ * las demás filas de tres.
+ */
+const SUMA_MINIMA_PARA_ESTIRAR = 1.6;
+
+const filasCalculadas = filas.map((fila, i) => {
+  const suma = fila.reduce((total, f) => total + f.ar, 0);
+  const objetivo = OBJETIVOS[i % OBJETIVOS.length];
+  const esUltima = i === filas.length - 1;
+  const denominador =
+    esUltima && suma < SUMA_MINIMA_PARA_ESTIRAR
+      ? Math.max(suma, objetivo)
+      : suma;
+  return {
+    huecos: fila.length - 1,
+    fotos: fila.map((foto) => ({ ...foto, k: foto.ar / denominador })),
+  };
+});
+
+/**
+ * `sizes` por foto: el ancho al que se muestra se conoce en cada breakpoint,
+ * porque el contenedor de la página es escalonado (max-w-md / 3xl / 6xl) y no
+ * fluido. Decirle el ancho exacto al navegador es lo que evita que baje una
+ * versión de 400px para una tarjeta de 800.
+ */
+const ANCHOS_CONTENEDOR = { lg: 1152, md: 768, sm: 448 };
+/** Tiene que coincidir con `--hueco` del <style> de abajo (0.5rem). */
+const HUECO = 8;
+
+const anchoEnPx = (contenedor: number, k: number, huecos: number) =>
+  Math.round((contenedor - huecos * HUECO) * k);
+
+function sizesDe(k: number, huecos: number): string {
+  return [
+    `(min-width: 1024px) ${anchoEnPx(ANCHOS_CONTENEDOR.lg, k, huecos)}px`,
+    `(min-width: 768px) ${anchoEnPx(ANCHOS_CONTENEDOR.md, k, huecos)}px`,
+    `(min-width: 640px) ${anchoEnPx(ANCHOS_CONTENEDOR.sm, k, huecos)}px`,
+    '46vw',
+  ].join(', ');
+}
+
+/**
+ * Variantes a generar, según lo que mide la tarjeta más grande de esa foto.
+ *
+ * Una tarjeta vertical mide entre 185 y 380px: en una pantalla retina pide
+ * hasta 760px, o sea que con 400 y 800 alcanza. Pedirle además una tercera
+ * variante grande hacía que Astro generara 80 archivos de ~125 KB que ningún
+ * navegador llegaba a descargar (10 MB de build al vacío). Las horizontales,
+ * en cambio, ocupan hasta 870px de ancho y sí necesitan una variante grande.
+ */
+function widthsDe(k: number, huecos: number): number[] {
+  const ancho = anchoEnPx(ANCHOS_CONTENEDOR.lg, k, huecos);
+  return ancho > 500 ? [800, 1400] : [400, 800];
+}
+---
+
+{
+  fotos.length === 0 ? (
+    <p class="galeria-vacia">
+      Estamos preparando esta sección con fotos de nuestros trabajos. Mientras
+      tanto, escribinos por WhatsApp y te mostramos lo que hicimos en casos como
+      el tuyo.
+    </p>
+  ) : (
+    <div class="galeria">
+      {filasCalculadas.map(({ fotos: fila, huecos }, indiceFila) => (
+        <div class="galeria-fila">
+          {fila.map(({ img, alt, ar, k }, indice) => (
+            <figure
+              class="galeria-item"
+              style={`--ar:${ar.toFixed(4)}; --i:${indice}; flex-basis: calc((100% - ${huecos} * var(--hueco)) * ${k.toFixed(5)})`}
+            >
+              <Image
+                src={img}
+                alt={alt}
+                widths={widthsDe(k, huecos)}
+                sizes={sizesDe(k, huecos)}
+                format="webp"
+                quality={78}
+                loading={indiceFila === 0 ? 'eager' : 'lazy'}
+                decoding="async"
+              />
+            </figure>
+          ))}
+        </div>
+      ))}
+    </div>
+  )
+}
+
+<script>
+  /**
+   * Aparición al hacer scroll: cada foto entra cuando llega a la pantalla.
+   *
+   * El CSS es el que las esconde, condicionado a `html.js` (lo pone un script
+   * inline del Layout antes del primer pintado). Este script sólo agrega
+   * `.visible`. Si algo falla —no hay IntersectionObserver, salta un error—
+   * revela todo de una: el peor caso es quedarse sin animación, nunca una
+   * galería en blanco.
+   */
+  function initGaleria() {
+    const galeria = document.querySelector<HTMLElement>('.galeria');
+    if (!galeria) return;
+
+    const items = Array.from(
+      galeria.querySelectorAll<HTMLElement>('.galeria-item')
+    );
+    const revelarTodo = () =>
+      items.forEach((item) => item.classList.add('visible'));
+
+    if (!('IntersectionObserver' in window)) {
+      revelarTodo();
+      return;
+    }
+
+    try {
+      const observador = new IntersectionObserver(
+        (entradas) => {
+          for (const entrada of entradas) {
+            if (!entrada.isIntersecting) continue;
+            entrada.target.classList.add('visible');
+            observador.unobserve(entrada.target);
+          }
+        },
+        // El -8% inferior hace que la foto empiece a aparecer cuando ya entró
+        // de verdad en pantalla, y no justo al asomar el borde.
+        { rootMargin: '0px 0px -8% 0px', threshold: 0.01 }
+      );
+
+      for (const item of items) observador.observe(item);
+
+      // Red de seguridad: el efecto esconde contenido, así que si por lo que
+      // sea el observador no reveló nada, se muestra todo. En un navegador
+      // normal las fotos que ya están en pantalla se revelan en el primer
+      // frame, con lo cual esto no llega a hacer nada.
+      window.setTimeout(() => {
+        const algunaVisible = items.some((item) =>
+          item.classList.contains('visible')
+        );
+        if (!algunaVisible) revelarTodo();
+      }, 1200);
+    } catch {
+      revelarTodo();
+    }
+  }
+
+  // astro:page-load se dispara en la carga inicial y tras cada view transition
+  document.addEventListener('astro:page-load', initGaleria);
+</script>
+
+<style>
+  .galeria-vacia {
+    max-width: 40rem;
+    margin: 0 auto;
+    text-align: center;
+    color: #d1d5db;
+    line-height: 1.6;
+  }
+
+  .galeria {
+    --hueco: 0.5rem;
+  }
+
+  /* Móvil: mampostería de 2 columnas. `display: contents` disuelve las filas
+     calculadas para el escritorio, así que las fotos caen directamente en las
+     columnas y no hace falta duplicar el markup. Cada foto conserva su
+     proporción real y las columnas se rellenan solas: no quedan huecos. */
+  .galeria-fila {
+    display: contents;
+  }
+
+  .galeria {
+    columns: 2;
+    column-gap: var(--hueco);
+  }
+
+  .galeria-item {
+    margin: 0 0 var(--hueco);
+    break-inside: avoid;
+    overflow: hidden;
+    border-radius: 0.5rem;
+    aspect-ratio: var(--ar);
+    background-color: rgb(255 255 255 / 0.04);
+  }
+
+  .galeria-item img {
+    display: block;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition:
+      transform 500ms ease,
+      filter 500ms ease;
+  }
+
+  @media (min-width: 640px) {
+    /* Escritorio: cada fila es un flex de ancho completo. El ancho de cada foto
+       sale del `flex-basis` que calculó el frontmatter, y `aspect-ratio` le da
+       el alto: por eso todas las fotos de una fila coinciden en alto sin que
+       haya que recortar ninguna. */
+    .galeria {
+      columns: initial;
+    }
+
+    .galeria-fila {
+      display: flex;
+      gap: var(--hueco);
+      margin-bottom: var(--hueco);
+    }
+
+    .galeria-item {
+      flex-grow: 0;
+      margin: 0;
+    }
+
+    .galeria-item:hover img {
+      transform: scale(1.03);
+      filter: brightness(1.06);
+    }
+  }
+
+  /* --- aparición al scrollear ---
+     Sólo se esconden las fotos si hay JS (`html.js`, que marca el Layout antes
+     del primer pintado) y si quien mira no pidió menos movimiento. Con esas dos
+     condiciones en el CSS y no en el script, no hay parpadeo inicial ni riesgo
+     de que queden invisibles. */
+  @media (prefers-reduced-motion: no-preference) {
+    :global(html.js) .galeria-item {
+      opacity: 0;
+      transform: translateY(1.25rem);
+      transition:
+        opacity 700ms ease,
+        transform 700ms cubic-bezier(0.2, 0.7, 0.2, 1);
+      /* --i es la posición dentro de la fila: las fotos de una misma fila
+         entran una detrás de la otra en vez de todas juntas. */
+      transition-delay: calc(var(--i, 0) * 80ms);
+    }
+
+    :global(html.js) .galeria-item.visible {
+      opacity: 1;
+      transform: none;
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .galeria-item img {
+      transition: none;
+    }
+
+    .galeria-item:hover img {
+      transform: none;
+    }
+  }
+</style>

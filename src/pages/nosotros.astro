@@ -1,10 +1,12 @@
 ---
+import { Image } from 'astro:assets';
 import Layout from '../layouts/Layout.astro';
+import controles from '../assets/controles.png';
 ---
 
 <Layout
-  title="Aires del Rosario | Nosotros"
-  description="Servicio profesional de instalación, reparación y mantenimiento de aires acondicionados en Rosario. Calculá frigorías, contactanos y climatizá tu hogar."
+  title="Quiénes somos | Técnicos matriculados en aire acondicionado en Rosario"
+  description="Desde 2017 instalamos, reparamos y mantenemos aires acondicionados en Rosario y alrededores. Técnicos matriculados C.A.C.A.A.V. y especialistas en placas electrónicas inverter."
 >
   <section
     class="max-w-sm sm:max-w-md md:max-w-3xl lg:max-w-6xl mx-auto grid grid-cols-1 lg:grid-cols-2 min-h-dvh"
@@ -12,9 +14,12 @@ import Layout from '../layouts/Layout.astro';
     <div
       class="hidden lg:block sticky top-0 self-start pt-10 ml-[-160px] h-dvh"
     >
-      <img
-        src="/Controles.png"
-        alt="Controles de remoto de aires acondicionados"
+      <Image
+        src={controles}
+        alt="Controles remotos de aires acondicionados de distintas marcas"
+        width={1080}
+        height={1080}
+        loading="lazy"
         class="object-contain h-full"
       />
     </div>

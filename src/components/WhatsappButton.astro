@@ -1,10 +1,24 @@
+---
+import { Image } from 'astro:assets';
+import whatsappIcon from '../assets/whatsapp-icon.png';
+import { BUSINESS } from '../data/business';
+
+const mensaje = encodeURIComponent('Hola, quería averiguar sobre...');
+---
+
 <a
-  href="https://wa.me/5493412297176?text=Hola%2C%20quería%20averiguar%20sobre..."
+  href={`https://wa.me/${BUSINESS.whatsapp}?text=${mensaje}`}
   target="_blank"
   rel="noopener noreferrer"
-  class="fixed bottom-10 right-10 z-50 bg-green-500 hover:bg-green-600 text-white p-4 rounded-full shadow-lg transition-all duration-300 flex items-center justify-center animate-pulse"
+  class="fixed bottom-10 right-10 z-50 bg-green-500 hover:bg-green-600 text-white p-4 rounded-full shadow-lg transition-all duration-300 flex items-center justify-center animate-pulse motion-reduce:animate-none"
   aria-label="Contactar por WhatsApp"
 >
-  <!-- Icono -->
-  <img src="/whatsapp-icon.png" alt="whatsApp" class="w-12 h-12 rounded-full" />
+  <Image
+    src={whatsappIcon}
+    alt=""
+    width={48}
+    height={48}
+    loading="lazy"
+    class="w-12 h-12 rounded-full"
+  />
 </a>

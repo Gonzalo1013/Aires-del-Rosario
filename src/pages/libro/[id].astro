@@ -1,5 +1,6 @@
 ---
 import { getCollection, render } from 'astro:content';
+import { getImage } from 'astro:assets';
 import Layout from '../../layouts/Layout.astro';
 
 export async function getStaticPaths() {
@@ -12,21 +13,34 @@ export async function getStaticPaths() {
 
 const { book } = Astro.props;
 const { data } = book;
-const { title, img, subtitle } = data;
+const { title, img, subtitle, description } = data;
 
 const { Content } = await render(book);
 
 export const prerender = true;
+
+const seoTitle = `${title} de aire acondicionado en Rosario | Aires del Rosario`;
+const seoDescription = `${description} Técnicos matriculados en Rosario y alrededores. Presupuesto sin cargo por WhatsApp.`;
+
+const hero = img
+  ? await getImage({
+      src: img,
+      format: 'webp',
+      width: Math.min(1600, img.width),
+      quality: 82,
+    })
+  : undefined;
 ---
 
-<Layout
-  title={`Aires del Rosario | ${title}`}
-  description="Servicio profesional de instalación, reparación y mantenimiento de aires acondicionados en Rosario. Calculá frigorías, contactanos y climatizá tu hogar."
->
+<Layout title={seoTitle} description={seoDescription} image={hero?.src}>
   <section
     class="card-container mt-10 mb-6 max-w-sm sm:max-w-md md:max-w-3xl lg:max-w-6xl mx-auto"
-    style={`background: url(/${img}) center center / cover no-repeat`}
+    style={`background: url(${hero?.src}) center center / cover no-repeat`}
   >
+    <a href="/#servicios" class="volver">
+      <span aria-hidden="true">&larr;</span> Volver a servicios
+    </a>
+
     <div class="card">
       <h2 class="text-5xl pb-0.5">{title}</h2>
       <p class="text-2xl pb-4">{subtitle}</p>
@@ -37,10 +51,44 @@ export const prerender = true;
 
 <style>
   .card-container {
+    position: relative;
     display: flex;
     align-items: center;
     justify-content: center;
     height: 100vh;
+  }
+
+  /* Enlace real (no history.back()): así también funciona cuando alguien
+     entra directo desde Google y no tiene historial al que volver. */
+  .volver {
+    position: absolute;
+    top: 1rem;
+    left: 1rem;
+    z-index: 2;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.5rem 0.9rem;
+    border: 1px solid rgb(255 255 255 / 0.35);
+    border-radius: 9999px;
+    background: var(--color-brand-translucent);
+    backdrop-filter: blur(6px);
+    color: #fff;
+    font-size: 0.95rem;
+    line-height: 1;
+    text-decoration: none;
+    transition: background-color 200ms ease;
+  }
+
+  .volver:hover,
+  .volver:focus-visible {
+    background: var(--color-brand-accent);
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .volver {
+      transition: none;
+    }
   }
 
   .card {
