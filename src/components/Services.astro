@@ -65,14 +65,36 @@ const items = await Promise.all(
       const slide = document.querySelector('.slide');
       if (!slide) return;
 
-      document.querySelector('.next')?.addEventListener('click', () => {
-        const items = document.querySelectorAll('.item');
-        slide.appendChild(items[0]);
-      });
+      /** Adelanta una posición: la primera tarjeta se va al final de la cola. */
+      const avanzar = () => {
+        const items = slide.querySelectorAll('.item');
+        if (items.length > 0) slide.appendChild(items[0]);
+      };
+
+      document.querySelector('.next')?.addEventListener('click', avanzar);
 
       document.querySelector('.prev')?.addEventListener('click', () => {
-        const items = document.querySelectorAll('.item');
-        slide.prepend(items[items.length - 1]);
+        const items = slide.querySelectorAll('.item');
+        if (items.length > 0) slide.prepend(items[items.length - 1]);
+      });
+
+      // Click en una miniatura: adelanta hasta que esa foto sea la grande.
+      // Las posiciones 0 y 1 son la tarjeta grande (la 0 va detrás de la 1),
+      // así que la miniatura cercana está en la 2 y la lejana en la 3: hacen
+      // falta tantos avances como su posición menos uno.
+      slide.addEventListener('click', (evento) => {
+        const target = evento.target;
+        if (!(target instanceof Element)) return;
+
+        const item = target.closest('.item');
+        if (!item) return;
+
+        const posicion = Array.from(slide.children).indexOf(item);
+        // La grande no hace nada al clickearla: ahí adentro está el enlace al
+        // servicio, que tiene que seguir funcionando como enlace.
+        if (posicion < 2) return;
+
+        for (let i = 0; i < posicion - 1; i++) avanzar();
       });
     }
 
@@ -119,6 +141,21 @@ const items = await Promise.all(
        estaba debajo parecía desaparecer en vez de subir un lugar. */
     .slide .item:nth-child(n + 5) {
       display: none;
+    }
+
+    /* Las miniaturas se pueden clickear para traerlas al frente. El puntero y
+       el brillo al pasar por encima son la señal de que responden. El scale
+       repite el translate porque `transform` es una sola propiedad: sin él se
+       perdería el centrado vertical de la tarjeta. */
+    .slide .item:nth-child(3),
+    .slide .item:nth-child(4) {
+      cursor: pointer;
+    }
+
+    .slide .item:nth-child(3):hover,
+    .slide .item:nth-child(4):hover {
+      transform: translate(0, -50%) scale(1.04);
+      filter: brightness(1.12);
     }
 
     /* Velo degradado sólo sobre la tarjeta activa: las fotos tienen paredes
