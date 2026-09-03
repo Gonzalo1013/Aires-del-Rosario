@@ -38,7 +38,7 @@ There is no test suite.
 
 **The rows are computed in the frontmatter, not by CSS.** It is the justified layout Flickr and Google Photos use, but resolved at build time because the real dimensions of every photo are known there. Photos are appended to a row until the sum of their aspect ratios is closest to a target, cycling through `OBJETIVOS = [1.9, 2.9, 2.3, 3.3, 2.1, 2.7]`; then each photo's width is emitted as `flex-basis: calc((100% - <gaps>) * ar/Σar)`. Three consequences, all load-bearing:
 
-- Widths within a row are exactly proportional to the aspect ratios, so **nothing is cropped** — `aspect-ratio: var(--ar)` gives each item its height and every photo in a row lands on the same height without `cover` cutting anything. Measured on the current 90 photos: 0% crop on every one, every row exactly 1152/1152 px.
+- Widths within a row are exactly proportional to the aspect ratios, so **nothing is cropped** — `aspect-ratio: var(--ar)` gives each item its height and every photo in a row lands on the same height without `cover` cutting anything. Measured on the current 89 photos: 0% crop on every one, every row exactly 1152/1152 px.
 - Each row gets a **different height** (measured: 326 to 673 px, eight distinct heights), which is what makes tiles differ in size. That was the point of the design — with a fixed row height every photo comes out the same size.
 - The greedy loop closes a row at whichever sum is _closest_ to the target, above or below. Closing only when the target is exceeded let one landscape photo (ratio 1.78, three portraits' worth) overshoot a low target and squeeze its neighbours to 136 px wide.
 

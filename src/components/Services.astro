@@ -78,6 +78,15 @@ const items = await Promise.all(
         if (items.length > 0) slide.prepend(items[items.length - 1]);
       });
 
+      // Cuánto dura el desplazamiento de una tarjeta. Se lee del CSS para que
+      // los dos valores no se separen si alguien cambia la transición.
+      const primerItem = slide.querySelector('.item');
+      const duracion = primerItem
+        ? parseFloat(getComputedStyle(primerItem).transitionDuration) * 1000
+        : 500;
+
+      let enMovimiento = false;
+
       // Click en una miniatura: adelanta hasta que esa foto sea la grande.
       // Las posiciones 0 y 1 son la tarjeta grande (la 0 va detrás de la 1),
       // así que la miniatura cercana está en la 2 y la lejana en la 3: hacen
@@ -93,8 +102,25 @@ const items = await Promise.all(
         // La grande no hace nada al clickearla: ahí adentro está el enlace al
         // servicio, que tiene que seguir funcionando como enlace.
         if (posicion < 2) return;
+        if (enMovimiento) return;
 
-        for (let i = 0; i < posicion - 1; i++) avanzar();
+        // Los avances van de a uno, esperando que cada tarjeta termine de
+        // llegar. Hacerlos todos juntos provocaba un destello blanco: la
+        // tarjeta grande saliente pasaba de la posición 2 a la 5 —que está en
+        // display:none— y desaparecía de golpe, mientras la nueva tardaba
+        // medio segundo en crecer. En ese hueco se veía el fondo claro del
+        // contenedor. Paso a paso, la saliente siempre queda en la posición 1,
+        // que sigue ocupando el lugar de la grande hasta que la nueva llega.
+        let restantes = posicion - 1;
+        enMovimiento = true;
+
+        const paso = () => {
+          avanzar();
+          restantes -= 1;
+          if (restantes > 0) window.setTimeout(paso, duracion);
+          else enMovimiento = false;
+        };
+        paso();
       });
     }
 

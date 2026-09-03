@@ -93,8 +93,6 @@ export const ALT_GALERIA: Record<string, string> = {
     'Unidad exterior instalada de noche con vista a la ciudad',
   '43-split-instalado-sobre-el-mueble.jpg':
     'Split instalado sobre el mueble de un ambiente',
-  '44-equipo-instalado-en-local-con-mural.jpg':
-    'Equipo instalado en un local con mural pintado',
   '45-canaleta-abierta-para-la-preinstalacion.jpg':
     'Canaleta abierta en la pared para la preinstalación del equipo',
   '46-split-instalado-en-dormitorio-luminoso.jpg':
@@ -135,8 +133,8 @@ export const ALT_GALERIA: Record<string, string> = {
     'Conexión de cobre de la unidad interior, en detalle',
   '64-split-instalado-arriba-de-la-puerta.jpg':
     'Split instalado arriba de la puerta de un ambiente',
-  '65-recambio-de-un-equipo-antiguo.jpg':
-    'Recambio de un equipo antiguo por uno nuevo',
+  '65-preinstalacion-de-canerias-y-cableado-en-obra.jpg':
+    'Cañerías y cableado embutidos en la pared durante la preinstalación',
   '66-split-instalado-sobre-la-cortina.jpg':
     'Split instalado sobre la cortina de un dormitorio',
   '67-unidad-exterior-instalada-en-el-patio.jpg':
