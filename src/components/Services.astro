@@ -62,7 +62,9 @@ const items = await Promise.all(
 
   <script>
     function initCarousel() {
-      const slide = document.querySelector('.slide');
+      // El tipo va explícito: querySelector devuelve Element, y más abajo hace
+      // falta offsetHeight, que es de HTMLElement.
+      const slide = document.querySelector<HTMLElement>('.slide');
       if (!slide) return;
 
       /** Adelanta una posición: la primera tarjeta se va al final de la cola. */
@@ -78,16 +80,7 @@ const items = await Promise.all(
         if (items.length > 0) slide.prepend(items[items.length - 1]);
       });
 
-      // Cuánto dura el desplazamiento de una tarjeta. Se lee del CSS para que
-      // los dos valores no se separen si alguien cambia la transición.
-      const primerItem = slide.querySelector('.item');
-      const duracion = primerItem
-        ? parseFloat(getComputedStyle(primerItem).transitionDuration) * 1000
-        : 500;
-
-      let enMovimiento = false;
-
-      // Click en una miniatura: adelanta hasta que esa foto sea la grande.
+      // Click en una miniatura: esa foto pasa al frente.
       // Las posiciones 0 y 1 son la tarjeta grande (la 0 va detrás de la 1),
       // así que la miniatura cercana está en la 2 y la lejana en la 3: hacen
       // falta tantos avances como su posición menos uno.
@@ -102,25 +95,44 @@ const items = await Promise.all(
         // La grande no hace nada al clickearla: ahí adentro está el enlace al
         // servicio, que tiene que seguir funcionando como enlace.
         if (posicion < 2) return;
-        if (enMovimiento) return;
 
-        // Los avances van de a uno, esperando que cada tarjeta termine de
-        // llegar. Hacerlos todos juntos provocaba un destello blanco: la
-        // tarjeta grande saliente pasaba de la posición 2 a la 5 —que está en
-        // display:none— y desaparecía de golpe, mientras la nueva tardaba
-        // medio segundo en crecer. En ese hueco se veía el fondo claro del
-        // contenedor. Paso a paso, la saliente siempre queda en la posición 1,
-        // que sigue ocupando el lugar de la grande hasta que la nueva llega.
-        let restantes = posicion - 1;
-        enMovimiento = true;
+        const saltos = posicion - 1;
 
-        const paso = () => {
+        // La miniatura cercana está a un solo avance: se anima normalmente.
+        if (saltos === 1) {
           avanzar();
-          restantes -= 1;
-          if (restantes > 0) window.setTimeout(paso, duracion);
-          else enMovimiento = false;
-        };
-        paso();
+          return;
+        }
+
+        // La lejana está a dos. Los dos avances van juntos y SIN transición,
+        // por dos motivos:
+        //   - animados uno tras otro, la foto del medio ocupaba el lugar
+        //     grande de paso, y la idea es ir directo a la que se clickeó;
+        //   - animados a la vez, la tarjeta grande saliente pasa de la
+        //     posición 2 a la 5 —que está en display:none— y desaparece de un
+        //     frame al otro mientras la nueva tarda medio segundo en crecer:
+        //     en ese hueco se veía el fondo claro del contenedor (el destello).
+        // Sin transición no hay ni foto intermedia ni hueco: el reordenamiento
+        // entra en un solo frame y la nueva grande aparece con un fundido.
+        const items = Array.from(slide.children);
+        for (const el of items) el.classList.add('sin-transicion');
+
+        for (let i = 0; i < saltos; i++) avanzar();
+
+        // Fuerza el recálculo con las posiciones nuevas antes de volver a
+        // habilitar la transición: si no, el navegador junta los dos cambios
+        // en un solo paso y anima igual.
+        void slide.offsetHeight;
+        for (const el of items) el.classList.remove('sin-transicion');
+
+        const nuevaGrande = slide.children[1];
+        if (nuevaGrande) {
+          nuevaGrande.classList.add('entrando');
+          window.setTimeout(
+            () => nuevaGrande.classList.remove('entrando'),
+            400
+          );
+        }
       });
     }
 
@@ -182,6 +194,32 @@ const items = await Promise.all(
     .slide .item:nth-child(4):hover {
       transform: translate(0, -50%) scale(1.04);
       filter: brightness(1.12);
+    }
+
+    /* Salto directo a la miniatura lejana: el reordenamiento entra de una,
+       sin animar el recorrido, y la nueva tarjeta grande aparece con un
+       fundido corto para que el cambio no sea seco. */
+    .slide .item.sin-transicion {
+      transition: none;
+    }
+
+    .slide .item.entrando {
+      animation: aparecer-tarjeta 300ms ease-out;
+    }
+
+    @keyframes aparecer-tarjeta {
+      from {
+        opacity: 0;
+      }
+      to {
+        opacity: 1;
+      }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      .slide .item.entrando {
+        animation: none;
+      }
     }
 
     /* Velo degradado sólo sobre la tarjeta activa: las fotos tienen paredes
