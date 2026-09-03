@@ -62,9 +62,7 @@ const items = await Promise.all(
 
   <script>
     function initCarousel() {
-      // El tipo va explícito: querySelector devuelve Element, y más abajo hace
-      // falta offsetHeight, que es de HTMLElement.
-      const slide = document.querySelector<HTMLElement>('.slide');
+      const slide = document.querySelector('.slide');
       if (!slide) return;
 
       /** Adelanta una posición: la primera tarjeta se va al final de la cola. */
@@ -80,10 +78,17 @@ const items = await Promise.all(
         if (items.length > 0) slide.prepend(items[items.length - 1]);
       });
 
-      // Click en una miniatura: esa foto pasa al frente.
-      // Las posiciones 0 y 1 son la tarjeta grande (la 0 va detrás de la 1),
-      // así que la miniatura cercana está en la 2 y la lejana en la 3: hacen
-      // falta tantos avances como su posición menos uno.
+      // Click en cualquiera de las dos miniaturas: el carrusel avanza UN lugar.
+      // O sea que la cercana pasa a ser la grande, y clickear la lejana trae a
+      // la cercana. No es un salto directo a propósito: el carrusel siempre se
+      // mueve de a una foto, sea con las flechas o clickeando.
+      //
+      // Como efecto lateral, esto evita el destello que daba el salto doble:
+      // en un avance simple la tarjeta grande saliente cae en la posición 1,
+      // que comparte la regla de tarjeta grande y sigue cubriendo el lugar
+      // mientras la nueva crece. En un salto de dos, en cambio, pasaba directo
+      // a la posición 5 —que está en display:none—, desaparecía de un frame al
+      // otro y dejaba ver el fondo claro del contenedor.
       slide.addEventListener('click', (evento) => {
         const target = evento.target;
         if (!(target instanceof Element)) return;
@@ -91,48 +96,12 @@ const items = await Promise.all(
         const item = target.closest('.item');
         if (!item) return;
 
-        const posicion = Array.from(slide.children).indexOf(item);
         // La grande no hace nada al clickearla: ahí adentro está el enlace al
-        // servicio, que tiene que seguir funcionando como enlace.
-        if (posicion < 2) return;
+        // servicio, que tiene que seguir funcionando como enlace. Las
+        // posiciones 0 y 1 son las dos capas de la tarjeta grande.
+        if (Array.from(slide.children).indexOf(item) < 2) return;
 
-        const saltos = posicion - 1;
-
-        // La miniatura cercana está a un solo avance: se anima normalmente.
-        if (saltos === 1) {
-          avanzar();
-          return;
-        }
-
-        // La lejana está a dos. Los dos avances van juntos y SIN transición,
-        // por dos motivos:
-        //   - animados uno tras otro, la foto del medio ocupaba el lugar
-        //     grande de paso, y la idea es ir directo a la que se clickeó;
-        //   - animados a la vez, la tarjeta grande saliente pasa de la
-        //     posición 2 a la 5 —que está en display:none— y desaparece de un
-        //     frame al otro mientras la nueva tarda medio segundo en crecer:
-        //     en ese hueco se veía el fondo claro del contenedor (el destello).
-        // Sin transición no hay ni foto intermedia ni hueco: el reordenamiento
-        // entra en un solo frame y la nueva grande aparece con un fundido.
-        const items = Array.from(slide.children);
-        for (const el of items) el.classList.add('sin-transicion');
-
-        for (let i = 0; i < saltos; i++) avanzar();
-
-        // Fuerza el recálculo con las posiciones nuevas antes de volver a
-        // habilitar la transición: si no, el navegador junta los dos cambios
-        // en un solo paso y anima igual.
-        void slide.offsetHeight;
-        for (const el of items) el.classList.remove('sin-transicion');
-
-        const nuevaGrande = slide.children[1];
-        if (nuevaGrande) {
-          nuevaGrande.classList.add('entrando');
-          window.setTimeout(
-            () => nuevaGrande.classList.remove('entrando'),
-            400
-          );
-        }
+        avanzar();
       });
     }
 
@@ -181,7 +150,7 @@ const items = await Promise.all(
       display: none;
     }
 
-    /* Las miniaturas se pueden clickear para traerlas al frente. El puntero y
+    /* Las miniaturas se pueden clickear para avanzar el carrusel. El puntero y
        el brillo al pasar por encima son la señal de que responden. El scale
        repite el translate porque `transform` es una sola propiedad: sin él se
        perdería el centrado vertical de la tarjeta. */
@@ -194,32 +163,6 @@ const items = await Promise.all(
     .slide .item:nth-child(4):hover {
       transform: translate(0, -50%) scale(1.04);
       filter: brightness(1.12);
-    }
-
-    /* Salto directo a la miniatura lejana: el reordenamiento entra de una,
-       sin animar el recorrido, y la nueva tarjeta grande aparece con un
-       fundido corto para que el cambio no sea seco. */
-    .slide .item.sin-transicion {
-      transition: none;
-    }
-
-    .slide .item.entrando {
-      animation: aparecer-tarjeta 300ms ease-out;
-    }
-
-    @keyframes aparecer-tarjeta {
-      from {
-        opacity: 0;
-      }
-      to {
-        opacity: 1;
-      }
-    }
-
-    @media (prefers-reduced-motion: reduce) {
-      .slide .item.entrando {
-        animation: none;
-      }
     }
 
     /* Velo degradado sólo sobre la tarjeta activa: las fotos tienen paredes
