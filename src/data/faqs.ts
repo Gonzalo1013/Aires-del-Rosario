@@ -33,7 +33,7 @@ export const FAQS: Faq[] = [
     cta: {
       before: 'Podés calcularlo',
       linkText: 'acá',
-      href: '/calculo',
+      href: '/calculo/',
       after: '.',
     },
   },
