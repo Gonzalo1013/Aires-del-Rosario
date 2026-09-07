@@ -2,7 +2,6 @@
 title: Preinstalación
 subtitle: Preinstalación de cañerías, desagüe y línea eléctrica
 img: ../../assets/preinstalacion.jpg
-imgPosition: center 30%
 description: Cañerías, desagüe y electricidad embutidos en obra.
 order: 5
 ---

@@ -38,8 +38,7 @@ export const ALT_GALERIA: Record<string, string> = {
     'Split instalado en una casa con techo de madera',
   '14-unidad-exterior-en-pared-de-ladrillo.jpg':
     'Unidad exterior instalada en una pared de ladrillo',
-  '15-split-instalado-en-oficina.jpg':
-    'Split instalado en una oficina',
+  '15-split-instalado-en-oficina.jpg': 'Split instalado en una oficina',
   '16-equipos-y-herramientas-antes-de-empezar.jpg':
     'Equipos nuevos y herramientas listos antes de empezar la instalación',
   '17-split-negro-instalado-en-pared-blanca.jpg':
@@ -50,8 +49,7 @@ export const ALT_GALERIA: Record<string, string> = {
     'Split instalado en una pared color salmón',
   '20-tecnico-limpiando-el-split-en-altura.jpg':
     'Técnico limpiando un split en altura con la pared protegida',
-  '21-split-instalado-en-dormitorio.jpg':
-    'Split instalado en un dormitorio',
+  '21-split-instalado-en-dormitorio.jpg': 'Split instalado en un dormitorio',
   '22-equipo-cubierto-y-escalera-en-el-service.jpg':
     'Equipo cubierto y escalera durante el service del aire',
   '23-split-instalado-en-el-living-de-un-departamento.jpg':
@@ -70,8 +68,7 @@ export const ALT_GALERIA: Record<string, string> = {
     'Split instalado en un ambiente recién pintado',
   '30-tecnico-nivelando-el-soporte-del-split.jpg':
     'Técnico nivelando el soporte del split antes de colgarlo',
-  '31-split-instalado-en-pared-lisa.jpg':
-    'Split instalado en una pared lisa',
+  '31-split-instalado-en-pared-lisa.jpg': 'Split instalado en una pared lisa',
   '32-carga-de-gas-en-el-balcon.jpg':
     'Carga de gas de la unidad exterior en un balcón',
   '33-split-instalado-con-caneria-a-la-vista.jpg':
@@ -96,8 +93,6 @@ export const ALT_GALERIA: Record<string, string> = {
     'Unidad exterior instalada de noche con vista a la ciudad',
   '43-split-instalado-sobre-el-mueble.jpg':
     'Split instalado sobre el mueble de un ambiente',
-  '44-equipo-instalado-en-local-con-mural.jpg':
-    'Equipo instalado en un local con mural pintado',
   '45-canaleta-abierta-para-la-preinstalacion.jpg':
     'Canaleta abierta en la pared para la preinstalación del equipo',
   '46-split-instalado-en-dormitorio-luminoso.jpg':
@@ -138,8 +133,8 @@ export const ALT_GALERIA: Record<string, string> = {
     'Conexión de cobre de la unidad interior, en detalle',
   '64-split-instalado-arriba-de-la-puerta.jpg':
     'Split instalado arriba de la puerta de un ambiente',
-  '65-recambio-de-un-equipo-antiguo.jpg':
-    'Recambio de un equipo antiguo por uno nuevo',
+  '65-preinstalacion-de-canerias-y-cableado-en-obra.jpg':
+    'Cañerías y cableado embutidos en la pared durante la preinstalación',
   '66-split-instalado-sobre-la-cortina.jpg':
     'Split instalado sobre la cortina de un dormitorio',
   '67-unidad-exterior-instalada-en-el-patio.jpg':
@@ -184,8 +179,9 @@ export const ALT_GALERIA: Record<string, string> = {
     'Split instalado en un departamento a estrenar',
   '87-caneria-de-la-unidad-exterior-en-altura.jpg':
     'Cañería de la unidad exterior en un edificio en altura',
-  '88-split-instalado-en-pared-clara.jpg':
-    'Split instalado en una pared clara',
+  '88-split-instalado-en-pared-clara.jpg': 'Split instalado en una pared clara',
   '89-recorrido-de-canerias-dejado-en-obra.jpg':
     'Recorrido de cañerías dejado en obra',
+  '90-preinstalacion-de-canerias-en-pared-de-ladrillo.jpg':
+    'Preinstalación de cañerías y desagüe embutidos en una pared de ladrillo',
 };

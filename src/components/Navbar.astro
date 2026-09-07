@@ -7,14 +7,23 @@ import logo from '../assets/logo-white.png';
  * móvil se generan de acá. Antes cada enlace estaba escrito dos veces con su
  * plantilla de clases repetida, y las etiquetas ya se habían desincronizado
  * (escritorio decía "Preguntas freq." y móvil "FAQ").
+ *
+ * Las rutas van con barra final porque esa es la forma canónica del sitio: el
+ * build genera /galeria/index.html y el <link rel="canonical"> declara
+ * "/galeria/". Enlazar a "/galeria" hacía que Google descubriera cada página
+ * por una URL que no es la canónica, y Search Console las reportaba como
+ * "página alternativa con etiqueta canónica adecuada".
  */
 const LINKS = [
   { href: '/', label: 'Inicio' },
-  { href: '/galeria', label: 'Galería' },
-  { href: '/nosotros', label: 'Nosotros' },
-  { href: '/faq', label: 'Preguntas freq.' },
+  { href: '/galeria/', label: 'Galería' },
+  { href: '/nosotros/', label: 'Nosotros' },
+  { href: '/faq/', label: 'Preguntas freq.' },
 ];
 
+// Ojo: esto ya viene con barra final (es /galeria/, no /galeria). Mientras
+// LINKS no la llevaba, la comparación de abajo daba falso en todas las
+// páginas menos el inicio y el enlace de la página actual nunca se marcaba.
 const actual = Astro.url.pathname;
 
 /** La página actual no se enlaza a sí misma: se marca y se desactiva. */

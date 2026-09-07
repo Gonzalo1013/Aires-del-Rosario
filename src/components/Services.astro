@@ -46,7 +46,7 @@ const items = await Promise.all(
           <div class="content">
             <div class="name">{title}</div>
             <div class="des">{description}</div>
-            <a class="cta" href={`/libro/${slug}`}>
+            <a class="cta" href={`/libro/${slug}/`}>
               Ver más sobre {title.toLowerCase()}
             </a>
           </div>
@@ -65,14 +65,43 @@ const items = await Promise.all(
       const slide = document.querySelector('.slide');
       if (!slide) return;
 
-      document.querySelector('.next')?.addEventListener('click', () => {
-        const items = document.querySelectorAll('.item');
-        slide.appendChild(items[0]);
-      });
+      /** Adelanta una posición: la primera tarjeta se va al final de la cola. */
+      const avanzar = () => {
+        const items = slide.querySelectorAll('.item');
+        if (items.length > 0) slide.appendChild(items[0]);
+      };
+
+      document.querySelector('.next')?.addEventListener('click', avanzar);
 
       document.querySelector('.prev')?.addEventListener('click', () => {
-        const items = document.querySelectorAll('.item');
-        slide.prepend(items[items.length - 1]);
+        const items = slide.querySelectorAll('.item');
+        if (items.length > 0) slide.prepend(items[items.length - 1]);
+      });
+
+      // Click en cualquiera de las dos miniaturas: el carrusel avanza UN lugar.
+      // O sea que la cercana pasa a ser la grande, y clickear la lejana trae a
+      // la cercana. No es un salto directo a propósito: el carrusel siempre se
+      // mueve de a una foto, sea con las flechas o clickeando.
+      //
+      // Como efecto lateral, esto evita el destello que daba el salto doble:
+      // en un avance simple la tarjeta grande saliente cae en la posición 1,
+      // que comparte la regla de tarjeta grande y sigue cubriendo el lugar
+      // mientras la nueva crece. En un salto de dos, en cambio, pasaba directo
+      // a la posición 5 —que está en display:none—, desaparecía de un frame al
+      // otro y dejaba ver el fondo claro del contenedor.
+      slide.addEventListener('click', (evento) => {
+        const target = evento.target;
+        if (!(target instanceof Element)) return;
+
+        const item = target.closest('.item');
+        if (!item) return;
+
+        // La grande no hace nada al clickearla: ahí adentro está el enlace al
+        // servicio, que tiene que seguir funcionando como enlace. Las
+        // posiciones 0 y 1 son las dos capas de la tarjeta grande.
+        if (Array.from(slide.children).indexOf(item) < 2) return;
+
+        avanzar();
       });
     }
 
@@ -119,6 +148,21 @@ const items = await Promise.all(
        estaba debajo parecía desaparecer en vez de subir un lugar. */
     .slide .item:nth-child(n + 5) {
       display: none;
+    }
+
+    /* Las miniaturas se pueden clickear para avanzar el carrusel. El puntero y
+       el brillo al pasar por encima son la señal de que responden. El scale
+       repite el translate porque `transform` es una sola propiedad: sin él se
+       perdería el centrado vertical de la tarjeta. */
+    .slide .item:nth-child(3),
+    .slide .item:nth-child(4) {
+      cursor: pointer;
+    }
+
+    .slide .item:nth-child(3):hover,
+    .slide .item:nth-child(4):hover {
+      transform: translate(0, -50%) scale(1.04);
+      filter: brightness(1.12);
     }
 
     /* Velo degradado sólo sobre la tarjeta activa: las fotos tienen paredes
